@@ -1,0 +1,16 @@
+<mxfile host="Electron" modified="2023-04-28T08:10:03.488Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="OBKJTjW_4bXidd8SDqWo" version="21.1.2" type="device">
+  <diagram name="Page-1" id="GCVDSdfoNmF85xw6K0mg">
+    <mxGraphModel dx="1050" dy="573" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="yqiCy7JYzLff_FN-Rw61-1" value="&amp;lt;&amp;lt;enumeration&amp;gt;&amp;gt;&lt;br&gt;&lt;b&gt;Elements&lt;/b&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="620" y="40" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="yqiCy7JYzLff_FN-Rw61-2" value="fire&lt;br&gt;water&lt;br&gt;earth&lt;br&gt;magic&lt;br&gt;kryptonite&lt;br&gt;wind&lt;br&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" vertex="1" parent="yqiCy7JYzLff_FN-Rw61-1">
+          <mxGeometry y="40" width="140" height="110" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
