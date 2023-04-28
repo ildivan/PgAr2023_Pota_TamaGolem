@@ -10,5 +10,12 @@ public enum Element {
     LIGHT,
     DARKNESS,
     CHAOS,
-    LIGHTNING
+    LIGHTNING;
+
+    public static Element elementOfValue(int value){
+        for (Element e : Element.values()){
+            if(e.ordinal() == value) return e;
+        }
+        throw new IllegalArgumentException("Element does not exist");
+    }
 }
