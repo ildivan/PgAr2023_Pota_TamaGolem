@@ -15,7 +15,6 @@ public class ElementsBalance {
     public static ElementsBalance newRandomBalance(int numberOfElements, int maxDamage){
 
         int[][] damageTable = new int[numberOfElements][numberOfElements];
-        int[] partialSumsOfColumns = new int[numberOfElements];
         for (int i = 0; i < (numberOfElements-1); i++) {
             int partialSumOfRow = 0;
             for (int j = 0; j < i; j++) {
@@ -24,29 +23,23 @@ public class ElementsBalance {
 
             for (int j = i+1; j < (numberOfElements-1); j++) {
                 int remainingElementsInRow = numberOfElements - j - 1;
-                int rowLowerBound = getLowerBound(maxDamage,partialSumOfRow,remainingElementsInRow);
-                int rowUpperBound = getUpperBound(maxDamage,partialSumOfRow,remainingElementsInRow);
 
-                int columnFirstBound = maxDamage * (-numberOfElements + (2 * j) - i) - partialSumsOfColumns[j];
-                int columnSecondBound = maxDamage * (numberOfElements - (2 * j) + i) - partialSumsOfColumns[j];
-                int columnLowerBound = Math.min(columnFirstBound,columnSecondBound);
-                int columnUpperBound = Math.max(columnFirstBound,columnSecondBound);
-
-                int lowerBound = Math.max(rowLowerBound,columnLowerBound);
-                int upperBound = Math.min(rowUpperBound,columnUpperBound);
-
-                damageTable[i][j] = generateValidRandomNumber(lowerBound,upperBound);
+                damageTable[i][j] = generateRandomDamage(maxDamage,partialSumOfRow,remainingElementsInRow);
                 damageTable[j][i] = - damageTable[i][j];
                 partialSumOfRow += damageTable[i][j];
-                partialSumsOfColumns[j] += damageTable[i][j];
             }
             damageTable[i][numberOfElements-1] = -partialSumOfRow;
             damageTable[numberOfElements-1][i] = partialSumOfRow;
-            partialSumsOfColumns[numberOfElements-1] += -partialSumOfRow;
         }
 
         printTable(damageTable);
         return new ElementsBalance(damageTable);
+    }
+
+    private static int generateRandomDamage(int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
+        int lowerBound = getLowerBound(maxDamage, partialSumOfRow, remainingElementsInRow);
+        int upperBound = getUpperBound(maxDamage, partialSumOfRow, remainingElementsInRow);
+        return generateValidRandomNumber(lowerBound,upperBound);
     }
 
     private static int generateValidRandomNumber(int lowerBound, int upperBound) {
