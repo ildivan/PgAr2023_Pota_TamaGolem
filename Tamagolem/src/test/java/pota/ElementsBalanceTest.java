@@ -2,6 +2,8 @@ package pota;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pota.element.Element;
+import pota.element.ElementsBalance;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,7 +12,7 @@ public class ElementsBalanceTest {
     @Test
     public void shouldGenerateInBounds() {
         int numberOfElements = 10;
-        int maxDamage = 12;
+        int maxDamage = 13;
         ElementsBalance balance = ElementsBalance.newRandomBalance(numberOfElements,maxDamage);
         for (int i = 0; i < numberOfElements; i++) {
             for (int j = 0; j < numberOfElements; j++) {

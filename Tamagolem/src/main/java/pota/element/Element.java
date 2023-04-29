@@ -1,4 +1,4 @@
-package pota;
+package pota.element;
 
 public enum Element {
     FIRE,
