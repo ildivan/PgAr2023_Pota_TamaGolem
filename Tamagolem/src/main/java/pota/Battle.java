@@ -40,4 +40,10 @@ public class Battle {
         firstPlayer.nextGolem();
         firstPlayer.getCurrentGolem().setElementsStones(stones);
     }
+
+    public void summonSecondPlayerGolem(Element... stones){
+        secondPlayer.nextGolem();
+        secondPlayer.getCurrentGolem().setElementsStones(stones);
+    }
+
 }
