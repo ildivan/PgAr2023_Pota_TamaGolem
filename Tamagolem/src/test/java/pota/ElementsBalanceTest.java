@@ -50,12 +50,14 @@ public class ElementsBalanceTest {
 
     @Test
     public void shouldGenerateInBounds() {
-        for (int i = 0; i < numberOfElements; i++) {
-            for (int j = 0; j < numberOfElements; j++) {
-                Element firstElement = Element.elementOfValue(i);
-                Element secondElement = Element.elementOfValue(j);
-                assertTrue(balance.getDamage(firstElement,secondElement) >= -maxDamage
-                        && balance.getDamage(firstElement,secondElement) <= maxDamage);
+        for (int times = 0; times < 100; times++) {
+            for (int i = 0; i < numberOfElements; i++) {
+                for (int j = 0; j < numberOfElements; j++) {
+                    Element firstElement = Element.elementOfValue(i);
+                    Element secondElement = Element.elementOfValue(j);
+                    assertTrue(balance.getDamage(firstElement,secondElement) >= -maxDamage
+                            && balance.getDamage(firstElement,secondElement) <= maxDamage);
+                }
             }
         }
     }
