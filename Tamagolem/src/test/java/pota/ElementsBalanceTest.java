@@ -18,9 +18,10 @@ public class ElementsBalanceTest {
     @BeforeAll
     public static void setup() {
         numberOfElements = 10;
-        maxDamage = 5;
+        maxDamage = 6;
         balance = ElementsBalance.newRandomBalance(numberOfElements,maxDamage);
     }
+
 
     @Test
     public void rowsShouldSumToZero() {
@@ -50,14 +51,12 @@ public class ElementsBalanceTest {
 
     @Test
     public void shouldGenerateInBounds() {
-        for (int times = 0; times < 100; times++) {
-            for (int i = 0; i < numberOfElements; i++) {
-                for (int j = 0; j < numberOfElements; j++) {
-                    Element firstElement = Element.elementOfValue(i);
-                    Element secondElement = Element.elementOfValue(j);
-                    assertTrue(balance.getDamage(firstElement,secondElement) >= -maxDamage
-                            && balance.getDamage(firstElement,secondElement) <= maxDamage);
-                }
+        for (int i = 0; i < numberOfElements; i++) {
+            for (int j = 0; j < numberOfElements; j++) {
+                Element firstElement = Element.elementOfValue(i);
+                Element secondElement = Element.elementOfValue(j);
+                assertTrue(balance.getDamage(firstElement,secondElement) >= -maxDamage
+                        && balance.getDamage(firstElement,secondElement) <= maxDamage);
             }
         }
     }

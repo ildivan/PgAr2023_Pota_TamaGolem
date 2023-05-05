@@ -12,8 +12,8 @@ public class PlayerTest {
         int numOfGolems = 10;
         Player team = new Player(numOfGolems,10);
         for (int i = 0; i < numOfGolems; i++) {
-            team.getNextGolem();
+            team.nextGolem();
         }
-        Assertions.assertThrows(NoMoreGolemsException.class, team::getNextGolem);
+        Assertions.assertThrows(NoMoreGolemsException.class, team::nextGolem);
     }
 }
