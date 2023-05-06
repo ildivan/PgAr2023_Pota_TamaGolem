@@ -18,7 +18,7 @@ public class ElementsBalanceTest {
     @BeforeAll
     public static void setup() {
         numberOfElements = 10;
-        maxDamage = 6;
+        maxDamage = 200;
         balance = ElementsBalance.newRandomBalance(numberOfElements,maxDamage);
     }
 

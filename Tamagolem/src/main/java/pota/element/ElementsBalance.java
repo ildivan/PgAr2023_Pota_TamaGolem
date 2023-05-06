@@ -13,42 +13,41 @@ public class ElementsBalance {
     }
 
     public static ElementsBalance newRandomBalance(int numberOfElements, int maxDamage){
-
+        boolean oddNumberOfElements = numberOfElements % 2 != 0;
         int[][] damageTable = new int[numberOfElements][numberOfElements];
         int[] rowsPartialSum = new int[numberOfElements];
 
-        if(numberOfElements %2 != 0) {
-            for (int i = 0; i < (numberOfElements/2); i++) {
-                for (int j = i+1; j < (numberOfElements/2); j++) {
-                    int remaining = (numberOfElements/2) - j;
-                    damageTable[i][j] = generateRandomDamageForOddNumberOfElements(maxDamage, rowsPartialSum[i], remaining);
-                    damageTable[i][numberOfElements-j-1] = damageTable[i][j];
-                    rowsPartialSum[i] += damageTable[i][j];
+        for (int i = 0; i < (numberOfElements / 2); i++) {
+            for (int j = i + 1; j < (numberOfElements / 2); j++) {
+                int remaining = (numberOfElements / 2) - j;
+                if(oddNumberOfElements){
+                    damageTable[i][j] = generateRandomDamage(maxDamage, rowsPartialSum[i], remaining);
+                }else{
+                    damageTable[i][j] = generateRandomDamage(maxDamage/2, rowsPartialSum[i], remaining);
                 }
-                damageTable[i][numberOfElements/2] = -rowsPartialSum[i];
-                damageTable[i][numberOfElements-i-1] = -rowsPartialSum[i];
+                damageTable[i][numberOfElements - j - 1] = damageTable[i][j];
+                rowsPartialSum[i] += damageTable[i][j];
             }
-            damageTable[numberOfElements/2-1][numberOfElements/2]
-                    = generateRandomDamageForOddNumberOfElements(maxDamage,0,1);
-            damageTable[numberOfElements/2-1][numberOfElements/2 + 1]
-                    = -damageTable[numberOfElements/2-1][numberOfElements/2];
-        }else{
-            for (int i = 0; i < (numberOfElements/2); i++) {
-                for (int j = i+1; j < (numberOfElements/2); j++) {
-                    int remaining = (numberOfElements/2) - j;
-                    damageTable[i][j] = generateRandomDamageForEvenNumberOfElements(maxDamage, rowsPartialSum[i], remaining);
-                    damageTable[i][numberOfElements-j-1] = damageTable[i][j];
-                    rowsPartialSum[i] += damageTable[i][j];
-                }
-                damageTable[i][numberOfElements-i-1] = -2*rowsPartialSum[i];
+            if(oddNumberOfElements){
+                damageTable[i][numberOfElements / 2] = -rowsPartialSum[i];
+                damageTable[i][numberOfElements - i - 1] = -rowsPartialSum[i];
+            }else{
+                damageTable[i][numberOfElements - i - 1] = -2*rowsPartialSum[i];
             }
-
-            damageTable[numberOfElements/2 -2][numberOfElements/2] /= 2;
-            damageTable[numberOfElements/2 - 1][numberOfElements/2]
-                    = damageTable[numberOfElements/2 -2][numberOfElements/2];
-            damageTable[numberOfElements/2 -2][numberOfElements/2 + 1]
-                    = -(damageTable[numberOfElements/2 -1][numberOfElements/2-1]
-                        + damageTable[numberOfElements/2 -1][numberOfElements/2]);
+        }
+        if (oddNumberOfElements) {
+            damageTable[numberOfElements / 2 - 1][numberOfElements / 2]
+                    = generateRandomDamage(maxDamage, 0, 1);
+            damageTable[numberOfElements / 2 - 1][numberOfElements / 2 + 1]
+                    = -damageTable[numberOfElements / 2 - 1][numberOfElements / 2];
+        } else {
+            damageTable[numberOfElements / 2 - 2][numberOfElements / 2]
+                    = generateRandomDamage(maxDamage / 2, damageTable[numberOfElements / 2 - 2][numberOfElements / 2 - 1], 1);
+            damageTable[numberOfElements / 2 - 1][numberOfElements / 2]
+                    = damageTable[numberOfElements / 2 - 2][numberOfElements / 2 - 1] - damageTable[numberOfElements / 2 - 2][numberOfElements / 2];
+            damageTable[numberOfElements / 2 - 2][numberOfElements / 2 + 1]
+                    = -(damageTable[numberOfElements / 2 - 2][numberOfElements / 2 - 1]
+                    + damageTable[numberOfElements / 2 - 2][numberOfElements / 2]);
         }
 
         symmetrizeUpperTriangle(damageTable);
@@ -76,7 +75,7 @@ public class ElementsBalance {
         }
     }
 
-    private static int generateRandomDamageForOddNumberOfElements
+    private static int generateRandomDamage
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
         int lowerBound = getLowerBoundForOddNumberOfElements(maxDamage, partialSumOfRow ,remainingElementsInRow);
         int upperBound = getUpperBoundForOddNumberOfElements(maxDamage, partialSumOfRow, remainingElementsInRow);
@@ -94,26 +93,6 @@ public class ElementsBalance {
     private static int getUpperBoundForOddNumberOfElements
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
         return Math.min(maxDamage, -partialSumOfRow + remainingElementsInRow * maxDamage);
-    }
-
-    private static int generateRandomDamageForEvenNumberOfElements
-            (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
-        int lowerBound = getLowerBoundForEvenNumberOfElements(maxDamage, partialSumOfRow ,remainingElementsInRow);
-        int upperBound = getUpperBoundForEvenNumberOfElements(maxDamage, partialSumOfRow, remainingElementsInRow);
-        if(remainingElementsInRow == 1){
-            return generateValidRandomNumber(lowerBound,upperBound,-partialSumOfRow);
-        }
-        return generateValidRandomNumber(lowerBound,upperBound);
-    }
-
-    private static int getLowerBoundForEvenNumberOfElements
-            (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
-        return Math.max(-maxDamage,-(2*partialSumOfRow + 2*maxDamage*remainingElementsInRow -maxDamage)) ;
-    }
-
-    private static int getUpperBoundForEvenNumberOfElements
-            (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
-        return Math.min(maxDamage,-(2*partialSumOfRow - 2*maxDamage*remainingElementsInRow +maxDamage));
     }
 
     private static int generateValidRandomNumber(int lowerBound, int upperBound, int...invalidValues) {
