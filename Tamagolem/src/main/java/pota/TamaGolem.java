@@ -5,6 +5,7 @@ import pota.element.Element;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 
 public class TamaGolem {
     private Deque<Element> elementStones;
@@ -17,6 +18,10 @@ public class TamaGolem {
 
     public void setElementsStones(Element... stones) {
         elementStones.addAll(Arrays.asList(stones));
+    }
+
+    public List<Element> getElementStones() {
+        return elementStones.stream().toList();
     }
 
     public Element getNextStone() {

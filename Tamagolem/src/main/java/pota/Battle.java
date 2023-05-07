@@ -3,6 +3,11 @@ package pota;
 import pota.element.Element;
 import pota.element.ElementsBalance;
 import pota.error.AttackWithDeadGolemException;
+import pota.error.NoMoreGolemsException;
+import pota.error.SameElementStonesException;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Battle {
     private ElementsBalance balance;
@@ -21,6 +26,30 @@ public class Battle {
         firstPlayer.nextGolem();
     }
 
+    public void start(){
+        summonFirstPlayerGolem(Element.FIRE);
+        summonSecondPlayerGolem(Element.WATER);
+        try{
+            while (true) {
+                try {
+                    nextAttack();
+                } catch (AttackWithDeadGolemException e) {
+                    if (!firstPlayer.getCurrentGolem().isAlive()) {
+                        summonFirstPlayerGolem(Element.WATER);
+                    } else {
+                        summonSecondPlayerGolem(Element.CHAOS);
+                    }
+                }
+            }
+        }catch(NoMoreGolemsException e){
+            if(!firstPlayer.getCurrentGolem().isAlive()){
+                System.out.println("Second player wins!");
+            }else{
+                System.out.println("First player wins!");
+            }
+        }
+    }
+
     public void nextAttack() {
         if(firstPlayer.getCurrentGolem().isAlive() && secondPlayer.getCurrentGolem().isAlive()){
             Element firstStone = firstPlayer.getCurrentGolem().getNextStone();
@@ -37,13 +66,22 @@ public class Battle {
     }
 
     public void summonFirstPlayerGolem(Element... stones){
-        firstPlayer.nextGolem();
-        firstPlayer.getCurrentGolem().setElementsStones(stones);
+        summonGolem(firstPlayer,secondPlayer,stones);
     }
 
     public void summonSecondPlayerGolem(Element... stones){
-        secondPlayer.nextGolem();
-        secondPlayer.getCurrentGolem().setElementsStones(stones);
+        summonGolem(secondPlayer,firstPlayer,stones);
     }
 
+    private void summonGolem(Player playerThatSummons, Player otherPlayer,Element... stones){
+        List<Element> firstPlayerStones = Arrays.asList(stones);
+        List<Element> secondPlayerStones = otherPlayer.getCurrentGolem().getElementStones();
+
+        if(!firstPlayerStones.equals(secondPlayerStones)) {
+            playerThatSummons.nextGolem();
+            playerThatSummons.getCurrentGolem().setElementsStones(stones);
+            return;
+        }
+        throw new SameElementStonesException();
+    }
 }

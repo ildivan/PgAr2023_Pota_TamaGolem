@@ -1,7 +1,5 @@
 package pota.element;
 
-import java.util.Arrays;
-
 public class ElementsBalance {
     private final int[][] elementsEffects;
 
@@ -53,7 +51,6 @@ public class ElementsBalance {
         symmetrizeUpperTriangle(damageTable);
         toAntiSymmetricMatrix(damageTable);
 
-        printTable(damageTable);
         return new ElementsBalance(damageTable);
     }
 
@@ -75,26 +72,32 @@ public class ElementsBalance {
         }
     }
 
+    //Generates a number (that belongs to a sequence that should sum to zero)
+    // between bounds that will allow the last element,
+    // that will be equal to -sumOfSequence, to be between -maxDamage and maxDamage.
     private static int generateRandomDamage
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
-        int lowerBound = getLowerBoundForOddNumberOfElements(maxDamage, partialSumOfRow ,remainingElementsInRow);
-        int upperBound = getUpperBoundForOddNumberOfElements(maxDamage, partialSumOfRow, remainingElementsInRow);
+        int lowerBound = getLowerBoundNumberOfElements(maxDamage, partialSumOfRow ,remainingElementsInRow);
+        int upperBound = getUpperBoundNumberOfElements(maxDamage, partialSumOfRow, remainingElementsInRow);
         if(remainingElementsInRow == 1){
             return generateValidRandomNumber(lowerBound,upperBound,-partialSumOfRow);
         }
         return generateValidRandomNumber(lowerBound,upperBound);
     }
 
-    private static int getLowerBoundForOddNumberOfElements
+    //Returns the minimum safe number to generate a number valid to generateRandomDamage requirements.
+    private static int getLowerBoundNumberOfElements
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
         return Math.max(-maxDamage, -partialSumOfRow - remainingElementsInRow * maxDamage);
     }
 
-    private static int getUpperBoundForOddNumberOfElements
+    //Returns the minimum safe number to generate a number valid to generateRandomDamage requirements.
+    private static int getUpperBoundNumberOfElements
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
         return Math.min(maxDamage, -partialSumOfRow + remainingElementsInRow * maxDamage);
     }
 
+    //Generates a random number between the specified bounds that is not equal to zero or any given invalid values.
     private static int generateValidRandomNumber(int lowerBound, int upperBound, int...invalidValues) {
         int randomNumber;
         boolean invalid;
@@ -112,11 +115,11 @@ public class ElementsBalance {
         return randomNumber;
     }
 
+    /**
+     * Gets the damage that the first element does to the second.
+     * Can be negative if the second element is the strong element or zero if the elements are equal
+     */
     public int getDamage(Element first, Element second){
         return elementsEffects[first.ordinal()][second.ordinal()];
-    }
-
-    public static void printTable(int[][]mat){
-        System.out.println(Arrays.deepToString(mat).replaceAll("], \\[","]\n["));
     }
 }

@@ -2,7 +2,6 @@ package pota;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pota.element.Element;
 import pota.element.ElementsBalance;
@@ -69,5 +68,20 @@ public class ElementsBalanceTest {
         ElementsBalance balance = new ElementsBalance(balanceMat);
         Assertions.assertEquals(2,balance.getDamage(Element.FIRE,Element.WATER));
         Assertions.assertEquals(-2,balance.getDamage(Element.WATER,Element.FIRE));
+    }
+
+    @Test
+    public void shouldContainZeroOnlyAlongTheDiagonal() {
+        for (int i = 0; i < numberOfElements; i++) {
+            for (int j = 0; j < numberOfElements; j++) {
+                Element firstElement = Element.elementOfValue(i);
+                Element secondElement = Element.elementOfValue(j);
+                if(i == j){
+                    Assertions.assertEquals(0, balance.getDamage(firstElement,secondElement));
+                }else{
+                    Assertions.assertNotEquals(0, balance.getDamage(firstElement,secondElement));
+                }
+            }
+        }
     }
 }
