@@ -1,28 +1,26 @@
 package pota;
 
-import pota.error.NoMoreGolemsException;
-
 public class Player {
-    private int remainingGolems;
-    private final int golemHealthPoints;
+    private String name;
+    private Team team;
 
-    private TamaGolem currentGolem;
-
-    public Player(int numberOfGolems, int golemHealthPoints) {
-        this.remainingGolems = numberOfGolems;
-        this.golemHealthPoints = golemHealthPoints;
+    public Player(String name) {
+        this.name = name;
     }
 
-    public TamaGolem getCurrentGolem() {
-        return currentGolem;
+    public String getName() {
+        return this.name;
     }
 
-    public void nextGolem() {
-        if (remainingGolems > 0) {
-            remainingGolems--;
-            currentGolem = new TamaGolem(golemHealthPoints);
-            return;
-        }
-        throw new NoMoreGolemsException();
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Team getTeam() {
+        return this.team;
+    }
+
+    public void createNewTeam(int numberOfGolems, int golemHealthPoints) {
+        team = new Team(numberOfGolems, golemHealthPoints);
     }
 }

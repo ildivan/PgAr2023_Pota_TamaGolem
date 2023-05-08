@@ -12,10 +12,8 @@ import java.util.List;
 public class Battle {
     private ElementsBalance balance;
     private int[] elementStoneStorage;
-    private Player firstPlayer;
-    private Player secondPlayer;
 
-    public Battle(int numberOfElements, int golemHealth) {
+    public Battle(Player player1, Player player2, int numberOfElements, int golemHealth) {
         balance = ElementsBalance.newRandomBalance(numberOfElements,golemHealth);
         int numberOfStonesPerGolem = (int) Math.ceil((numberOfElements+1.0)/3.0) + 1;
         int numberOfGolemsPerTeam
@@ -25,31 +23,31 @@ public class Battle {
         elementStoneStorage = new int[numberOfElements];
         Arrays.fill(elementStoneStorage,numberOfStonesPerElement);
 
-        firstPlayer = new Player(numberOfGolemsPerTeam,golemHealth);
-        secondPlayer = new Player(numberOfGolemsPerTeam,golemHealth);
-        firstPlayer.nextGolem();
-        secondPlayer.nextGolem();
+        player1.createNewTeam(numberOfGolemsPerTeam, golemHealth);
+        player2.createNewTeam(numberOfGolemsPerTeam, golemHealth);
+        player1.getTeam().nextGolem();
+        player2.getTeam().nextGolem();
     }
 
-    public void start(){
-        summonFirstPlayerGolem(Element.FIRE);
-        summonSecondPlayerGolem(Element.WATER);
+    public void start(Player player1, Player player2){
+        summonFirstPlayerGolem(player1, player2, Element.FIRE);
+        summonSecondPlayerGolem(player1, player2, Element.WATER);
         try{
             while (true) {
                 try {
-                    nextAttack();
+                    nextAttack(player1, player2);
                 } catch (AttackWithDeadGolemException e) {
-                    if (!firstPlayer.getCurrentGolem().isAlive()) {
-                        returnStonesToStorage(firstPlayer.getCurrentGolem());
-                        summonFirstPlayerGolem(Element.WATER);
+                    if (!player1.getTeam().getCurrentGolem().isAlive()) {
+                        returnStonesToStorage(player1.getTeam().getCurrentGolem());
+                        summonFirstPlayerGolem(player1, player2, Element.WATER);
                     } else {
-                        returnStonesToStorage(secondPlayer.getCurrentGolem());
-                        summonSecondPlayerGolem(Element.CHAOS);
+                        returnStonesToStorage(player2.getTeam().getCurrentGolem());
+                        summonSecondPlayerGolem(player1, player2, Element.CHAOS);
                     }
                 }
             }
         }catch(NoMoreGolemsException e){
-            if(!firstPlayer.getCurrentGolem().isAlive()){
+            if(!player1.getTeam().getCurrentGolem().isAlive()){
                 System.out.println("Second player wins!");
             }else{
                 System.out.println("First player wins!");
@@ -64,36 +62,40 @@ public class Battle {
         }
     }
 
-    public void nextAttack() {
-        if(firstPlayer.getCurrentGolem().isAlive() && secondPlayer.getCurrentGolem().isAlive()){
-            Element firstStone = firstPlayer.getCurrentGolem().getNextStone();
-            Element secondStone = secondPlayer.getCurrentGolem().getNextStone();
+    public void nextAttack(Player player1, Player player2) {
+        TamaGolem firstPlayerCurrentGolem = player1.getTeam().getCurrentGolem();
+        TamaGolem secondPlayerCurrentGolem = player2.getTeam().getCurrentGolem();
+
+        if(firstPlayerCurrentGolem.isAlive() && secondPlayerCurrentGolem.isAlive()){
+            Element firstStone = firstPlayerCurrentGolem.getNextStone();
+            Element secondStone = secondPlayerCurrentGolem.getNextStone();
+
 
             int damage = balance.getDamage(firstStone,secondStone);
             if(damage > 0) {
-                secondPlayer.getCurrentGolem().damageGolem(damage);
+                secondPlayerCurrentGolem.damageGolem(damage);
             }else if(damage < 0) {
-                firstPlayer.getCurrentGolem().damageGolem(-damage);
+                firstPlayerCurrentGolem.damageGolem(-damage);
             }
         }
         throw new AttackWithDeadGolemException();
     }
 
-    public void summonFirstPlayerGolem(Element... stones){
-        summonGolem(firstPlayer,secondPlayer,stones);
+    public void summonFirstPlayerGolem(Player player1, Player player2, Element... stones){
+        summonGolem(player1.getTeam(),player2.getTeam(),stones);
     }
 
-    public void summonSecondPlayerGolem(Element... stones){
-        summonGolem(secondPlayer,firstPlayer,stones);
+    public void summonSecondPlayerGolem(Player player1, Player player2, Element... stones){
+        summonGolem(player2.getTeam(),player1.getTeam(),stones);
     }
 
-    private void summonGolem(Player playerThatSummons, Player otherPlayer,Element... stones){
+    private void summonGolem(Team summonerPlayerTeam, Team otherPlayerTeam,Element... stones){
         List<Element> firstPlayerStones = Arrays.asList(stones);
-        List<Element> secondPlayerStones = otherPlayer.getCurrentGolem().getElementStones();
+        List<Element> secondPlayerStones = otherPlayerTeam.getCurrentGolem().getElementStones();
 
         if(!firstPlayerStones.equals(secondPlayerStones)) {
-            playerThatSummons.nextGolem();
-            playerThatSummons.getCurrentGolem().setElementsStones(stones);
+            summonerPlayerTeam.nextGolem();
+            summonerPlayerTeam.getCurrentGolem().setElementsStones(stones);
             return;
         }
         throw new SameElementStonesException();
