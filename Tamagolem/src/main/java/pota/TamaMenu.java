@@ -1,8 +1,11 @@
 package pota;
 
 import it.kibo.fp.lib.Menu;
+import it.kibo.fp.lib.InputData;
 
 public class TamaMenu {
-    private String[] entries = {"1. Gioca", "2. Fai qualcosa"};
-    Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
+    public static void setPlayerName(Player player) {
+        Menu.clearConsole();
+        player.setName(InputData.readString(String.format("Il nome attuale e' %s, inserisci quello nuovo: ", player.getName()), false));
+    }
 }
