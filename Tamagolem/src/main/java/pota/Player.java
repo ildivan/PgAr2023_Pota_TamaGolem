@@ -21,6 +21,7 @@ public class Player {
         if (remainingGolems > 0) {
             remainingGolems--;
             currentGolem = new TamaGolem(golemHealthPoints);
+            return;
         }
         throw new NoMoreGolemsException();
     }
