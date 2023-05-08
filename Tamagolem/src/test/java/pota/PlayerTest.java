@@ -10,10 +10,12 @@ public class PlayerTest {
     @Test
     public void shouldLetMeGetGolemsTheRightAmountOfTimes(){
         int numOfGolems = 10;
-        Player team = new Player(numOfGolems,10);
+        int golemHealthPoints = 10;
+        Player player = new Player("Giocatore 1");
+        player.createNewTeam(numOfGolems, golemHealthPoints);
         for (int i = 0; i < numOfGolems; i++) {
-            team.nextGolem();
+            player.getTeam().nextGolem();
         }
-        Assertions.assertThrows(NoMoreGolemsException.class, team::nextGolem);
+        Assertions.assertThrows(NoMoreGolemsException.class, player.getTeam()::nextGolem);
     }
 }
