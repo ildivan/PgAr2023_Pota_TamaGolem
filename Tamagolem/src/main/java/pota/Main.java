@@ -10,22 +10,25 @@ public class Main {
         Player player1 = new Player("Giocatore 1");
         Player player2 = new Player("Giocatore 2");
 
-        String[] entries = {"Nuova Partita", "Dichiara nomi giocatori", "Statistiche partite"};
+        String[] entries = {"Nuova Partita", "Dichiara nomi giocatori"};
         Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
         Menu.clearConsole();
 
+        Battle battle = new Battle(player1, player2, 5, 10);
         do {
             switch(tamaMenu.choose()) {
-                case 1 -> newGame();
+                case 1 -> newGame(player1, player2);
                 case 2 -> setPlayersNames(player1, player2);
-                case 3 -> stats();
                 case 0 -> { return; }
             }
             Menu.clearConsole();
         } while(true);
     }
 
-    public static void newGame() {}
+    public static void newGame(Player player1, Player player2) {
+        Battle battle = new Battle(player1, player2, 5, 10);
+        battle.start();
+    }
 
     public static void setPlayersNames(Player player1, Player player2) {
         Menu.clearConsole();
@@ -40,7 +43,7 @@ public class Main {
                 case 0 -> { return; }
             }
             Menu.clearConsole();
-        }while(true);
+        } while(true);
     }
 
     public static void stats() {}

@@ -9,3 +9,4 @@ public class AttackWithDeadGolemException extends RuntimeException{
         super(message);
     }
 }
+

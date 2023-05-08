@@ -25,3 +25,5 @@ public class Team {
         throw new NoMoreGolemsException();
     }
 }
+
+/*  */

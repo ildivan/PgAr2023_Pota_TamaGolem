@@ -24,3 +24,6 @@ public class Player {
         team = new Team(numberOfGolems, golemHealthPoints);
     }
 }
+/* in the class are the basic characteristics of each player,
+* while the Golem team is delineated in an additional class of its own.
+*/
