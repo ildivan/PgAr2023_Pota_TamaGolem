@@ -89,7 +89,7 @@ public class Battle {
                 System.out.printf("Vince %s!\n",firstPlayer.getName());
             }
             System.out.println("\n\nTABELLA DEI DANNI: ");
-            printElementBalance();
+            TamaMenu.printElementBalance(getBalance());
         }
 
     }
@@ -193,11 +193,6 @@ public class Battle {
         for (Element stone : stones) {
             elementStoneStorage[stone.ordinal()]++;
         }
-    }
-
-    private void printElementBalance() {
-        final PrettyPrinter printer = new PrettyPrinter(System.out);
-        printer.print(getBalance());
     }
 
     private String[][] getBalance() {

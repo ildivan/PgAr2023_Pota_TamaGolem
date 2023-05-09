@@ -1,6 +1,5 @@
 package pota;
 
-import it.kibo.fp.lib.Menu;
 import pota.element.ElementsBalance;
 
 public class Main {
@@ -10,17 +9,13 @@ public class Main {
         Player player1 = new Player("Giocatore 1");
         Player player2 = new Player("Giocatore 2");
 
-        String[] entries = {"Nuova Partita", "Dichiara nomi giocatori"};
-        Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
-        Menu.clearConsole();
-
         do {
-            switch(tamaMenu.choose()) {
+            switch(TamaMenu.mainMenu()) {
                 case 1 -> newGame(player1, player2);
                 case 2 -> setPlayersNames(player1, player2);
+                case 3 -> TamaMenu.printWinner(player2);
                 case 0 -> { return; }
             }
-            Menu.clearConsole();
         } while(true);
     }
 
@@ -30,20 +25,12 @@ public class Main {
     }
 
     public static void setPlayersNames(Player player1, Player player2) {
-        Menu.clearConsole();
-
         do {
-            String[] entries = {String.format("Modifica nome: %s", player1.getName()), String.format("Modifica nome: %s", player2.getName())};
-            Menu playerNamesMenu = new Menu("Modifica nomi giocatori", entries, true, true, false);
-
-            switch(playerNamesMenu.choose()) {
+            switch(TamaMenu.setPlayersNamesMenu(player1, player2)) {
                 case 1 -> TamaMenu.setPlayerName(player1);
                 case 2 -> TamaMenu.setPlayerName(player2);
                 case 0 -> { return; }
             }
-            Menu.clearConsole();
         } while(true);
     }
-
-    public static void stats() {}
 }

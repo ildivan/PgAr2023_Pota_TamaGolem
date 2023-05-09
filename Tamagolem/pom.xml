@@ -35,5 +35,10 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/kibofplib-1.0-javadoc.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.github.lalyos</groupId>
+            <artifactId>jfiglet</artifactId>
+            <version>0.0.9</version>
+        </dependency>
     </dependencies>
 </project>
