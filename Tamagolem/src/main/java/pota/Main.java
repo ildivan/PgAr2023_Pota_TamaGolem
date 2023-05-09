@@ -14,7 +14,6 @@ public class Main {
         Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
         Menu.clearConsole();
 
-        Battle battle = new Battle(player1, player2, 5, 10);
         do {
             switch(tamaMenu.choose()) {
                 case 1 -> newGame(player1, player2);
@@ -26,7 +25,7 @@ public class Main {
     }
 
     public static void newGame(Player player1, Player player2) {
-        Battle battle = new Battle(player1, player2, 5, 10);
+        Battle battle = new Battle(player1, player2, 10, 40);
         battle.start();
     }
 

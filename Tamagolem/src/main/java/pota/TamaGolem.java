@@ -40,7 +40,7 @@ public class TamaGolem {
     }
 
     public boolean isAlive() {
-        return healthPoints <= 0;
+        return healthPoints >= 0;
     }
 
 }

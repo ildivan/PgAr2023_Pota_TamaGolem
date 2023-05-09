@@ -7,6 +7,7 @@ import pota.error.AttackWithDeadGolemException;
 import pota.error.NoMoreGolemsException;
 import pota.error.SameElementStonesException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,7 @@ public class Battle {
 
     private final int numberOfElements;
     private final int numberOfStonesPerGolem;
+    private final int golemHealth;
     private final ElementsBalance balance;
     private final int[] elementStoneStorage;
     private Player firstPlayer;
@@ -22,6 +24,7 @@ public class Battle {
 
     public Battle(Player firstPlayer, Player secondPlayer, int numberOfElements, int golemHealth) {
         this.numberOfElements = numberOfElements;
+        this.golemHealth = golemHealth;
     //The maximum number of items chosen by the user is 10
     //in case of lower quantity they are considered up to the desired number in the order they are marked in the class "Element"
 
@@ -40,8 +43,6 @@ public class Battle {
 
         firstPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
         secondPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
-        firstPlayer.getTeam().nextGolem();
-        secondPlayer.getTeam().nextGolem();
     }
 
     public void start(){
@@ -56,29 +57,41 @@ public class Battle {
 
         summonFirstPlayerGolem();
         summonSecondPlayerGolem();
+        printGolemsHealth();
         try{
+            /* Until the golems die, attacks are thrown consecutively and cyclically
+             * according to the algorithm used to make the elements react with each other */
             while (true) {
                 try {
                     nextAttack();
+                    printGolemsHealth();
                 } catch (AttackWithDeadGolemException e) {
+                    /* When a golem dies, a new one will be summoned.*/
                     if (!firstPlayer.getTeam().getCurrentGolem().isAlive()) {
+                        System.out.printf("Il golem di %s è morto!\n",firstPlayer.getName());
                         returnStonesToStorage(firstPlayer.getTeam().getCurrentGolem());
                         summonFirstPlayerGolem();
                     } else {
+                        System.out.printf("Il golem di %s è morto!\n",secondPlayer.getName());
                         returnStonesToStorage(secondPlayer.getTeam().getCurrentGolem());
                         summonSecondPlayerGolem();
                     }
                 }
             }
         }catch(NoMoreGolemsException e){
+            /* Through the elimination of all of a player's Golems, the winner is declared. */
             if(!firstPlayer.getTeam().getCurrentGolem().isAlive()){
-                System.out.println("Second player wins!");
+                System.out.printf("Vince %s!\n",secondPlayer.getName());
             }else{
-                System.out.println("First player wins!");
+                System.out.printf("Vince %s!\n",firstPlayer.getName());
             }
+            printElementBalance();
         }
-        /* Play is continued by reducing health points and moving on to the next Golem based on attacks suffered.
-    *Through the elimination of all of a player's Golems, the winner is declared. */
+
+    }
+
+    private void printGolemsHealth() {
+
     }
 
     private void nextAttack() {
@@ -91,17 +104,17 @@ public class Battle {
 
             System.out.printf("Le pietre %s e %s stanno reagendo!\n",firstStone,secondStone);
 
-            /* Until the golems die, attacks are thrown consecutively and cyclically
-            * according to the algorithm used to make the elements react with each other */
-
             int damage = balance.getDamage(firstStone,secondStone);
             if(damage > 0) {
                 secondPlayerCurrentGolem.damageGolem(damage);
-                System.out.printf("Il golem di %s fa danno %d al golem di %s\n",firstPlayer.getName(),damage,secondPlayer.getName());
+                System.out.printf("Il golem di %s fa danno %d al golem di %s\n",
+                        firstPlayer.getName(),damage,secondPlayer.getName());
             }else if(damage < 0) {
                 firstPlayerCurrentGolem.damageGolem(-damage);
-                System.out.printf("Il golem di %s fa danno %d al golem di %s\n",secondPlayer.getName(),damage,firstPlayer.getName());
+                System.out.printf("Il golem di %s fa danno %d al golem di %s\n",
+                        secondPlayer.getName(),damage,firstPlayer.getName());
             }
+            return;
             // Each turn it is printed which Golem was attacked and the value of the damage
         }
         throw new AttackWithDeadGolemException();
@@ -118,10 +131,15 @@ public class Battle {
     private void summonGolem(Team summonerTeam, Team otherTeam){
         Element[] stones = retrieveStones();
 
-        List<Element> firstPlayerStones = Arrays.asList(stones);
-        List<Element> secondPlayerStones = otherTeam.getCurrentGolem().getElementStones();
+        List<Element> summonerStones = Arrays.asList(stones);
+        List<Element> otherGolemStones;
+        if(otherTeam.getCurrentGolem() != null) {
+            otherGolemStones = otherTeam.getCurrentGolem().getElementStones();
+        }else{
+            otherGolemStones = new ArrayList<>();
+        }
 
-        if(!firstPlayerStones.equals(secondPlayerStones)) {
+        if(!summonerStones.equals(otherGolemStones)) {
             summonerTeam.nextGolem();
             summonerTeam.getCurrentGolem().setElementsStones(stones);
             return;
@@ -163,6 +181,11 @@ public class Battle {
         for (Element stone : stones) {
             elementStoneStorage[stone.ordinal()]++;
         }
+    }
+
+    private void printElementBalance() {
+        final PrettyPrinter printer = new PrettyPrinter(System.out);
+        printer.print(getBalance());
     }
 
     public String[][] getBalance() {
