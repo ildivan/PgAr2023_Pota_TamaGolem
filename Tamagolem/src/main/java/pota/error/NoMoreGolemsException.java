@@ -10,3 +10,6 @@ public class NoMoreGolemsException extends RuntimeException{
     }
 }
 
+// Exception presented in case the player has reached the maximum number of usable golems
+
+

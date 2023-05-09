@@ -9,3 +9,7 @@ public class SameElementStonesException extends RuntimeException{
         super(message);
     }
 }
+
+/* in case the same element is used simultaneously by the two players,
+* the following exception is used thanks to which no health points are subtracted from either Golem.
+ */

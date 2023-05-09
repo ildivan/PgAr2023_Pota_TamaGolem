@@ -22,6 +22,9 @@ public class Battle {
 
     public Battle(Player firstPlayer, Player secondPlayer, int numberOfElements, int golemHealth) {
         this.numberOfElements = numberOfElements;
+    //The maximum number of items chosen by the user is 10
+    //in case of lower quantity they are considered up to the desired number in the order they are marked in the class "Element"
+
         balance = ElementsBalance.newRandomBalance(numberOfElements,golemHealth);
         numberOfStonesPerGolem = (int) Math.ceil((numberOfElements+1.0)/3.0) + 1;
         int numberOfGolemsPerTeam
@@ -74,6 +77,8 @@ public class Battle {
                 System.out.println("First player wins!");
             }
         }
+        /* Play is continued by reducing health points and moving on to the next Golem based on attacks suffered.
+    *Through the elimination of all of a player's Golems, the winner is declared. */
     }
 
     private void nextAttack() {
@@ -86,6 +91,9 @@ public class Battle {
 
             System.out.printf("Le pietre %s e %s stanno reagendo!\n",firstStone,secondStone);
 
+            /* Until the golems die, attacks are thrown consecutively and cyclically
+            * according to the algorithm used to make the elements react with each other */
+
             int damage = balance.getDamage(firstStone,secondStone);
             if(damage > 0) {
                 secondPlayerCurrentGolem.damageGolem(damage);
@@ -94,6 +102,7 @@ public class Battle {
                 firstPlayerCurrentGolem.damageGolem(-damage);
                 System.out.printf("Il golem di %s fa danno %d al golem di %s\n",secondPlayer.getName(),damage,firstPlayer.getName());
             }
+            // Each turn it is printed which Golem was attacked and the value of the damage
         }
         throw new AttackWithDeadGolemException();
     }

@@ -44,3 +44,6 @@ public class TamaGolem {
     }
 
 }
+/* Inflicted damage based on attacks of elements used in rotation.
+* The golem continues to be alive until the health points are reset
+*/

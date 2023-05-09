@@ -26,4 +26,6 @@ public class Team {
     }
 }
 
-/*  */
+/* count of Golems remaining to each player, with the appropriate remaining health points.
+* They are reduced during the game according to the damage taken
+*/
