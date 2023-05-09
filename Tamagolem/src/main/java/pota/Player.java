@@ -1,5 +1,10 @@
 package pota;
 
+import it.kibo.fp.lib.AnsiColors;
+
+/* In the class are the basic characteristics of each player,
+ * while the Golem team is delineated in an additional class of its own.
+ */
 public class Player {
     private String name;
     private Team team;
@@ -9,7 +14,7 @@ public class Player {
     }
 
     public String getName() {
-        return this.name;
+        return AnsiColors.BLUE + this.name + AnsiColors.RESET;
     }
 
     public void setName(String name) {
@@ -24,6 +29,3 @@ public class Player {
         team = new Team(numberOfGolems, golemHealthPoints);
     }
 }
-/* in the class are the basic characteristics of each player,
-* while the Golem team is delineated in an additional class of its own.
-*/

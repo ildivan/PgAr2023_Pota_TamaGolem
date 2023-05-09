@@ -55,17 +55,16 @@ public class Battle {
             firstPlayer = secondPlayer;
             secondPlayer = temp;
         }
-        System.out.printf("%s starts!\n",firstPlayer.getName());
 
         summonFirstPlayerGolem();
         summonSecondPlayerGolem();
         printGolemsHealth();
         try{
             /* Until the golems die, attacks are thrown consecutively and cyclically
-             * according to the algorithm used to make the elements react with each other */
+               according to the algorithm used to make the elements react with each other */
             while (true) {
                 try {
-                    printSeparator();
+                    TamaMenu.printSeparator();
                     nextAttack();
                     printGolemsHealth();
                 } catch (AttackWithDeadGolemException e) {
@@ -92,10 +91,6 @@ public class Battle {
             TamaMenu.printElementBalance(getBalance());
         }
 
-    }
-
-    private void printSeparator() {
-        System.out.println("-----------------------------------------------------");
     }
 
     private void printGolemsHealth() {
@@ -133,14 +128,20 @@ public class Battle {
     }
 
     private void summonFirstPlayerGolem(){
-        summonGolem(firstPlayer.getTeam(),secondPlayer.getTeam());
+        summonGolem(firstPlayer,secondPlayer);
     }
 
     private void summonSecondPlayerGolem(){
-        summonGolem(secondPlayer.getTeam(),firstPlayer.getTeam());
+        summonGolem(secondPlayer,firstPlayer);
     }
 
-    private void summonGolem(Team summonerTeam, Team otherTeam){
+    private void summonGolem(Player summoner, Player other){
+        Team summonerTeam = summoner.getTeam();
+        Team otherTeam = other.getTeam();
+
+        summonerTeam.nextGolem();
+        
+        System.out.printf("%s",summoner.getName());
         Element[] stones = retrieveStones();
 
         List<Element> summonerStones = Arrays.asList(stones);
@@ -152,7 +153,6 @@ public class Battle {
         }
 
         if(!summonerStones.equals(otherGolemStones)) {
-            summonerTeam.nextGolem();
             summonerTeam.getCurrentGolem().setElementsStones(stones);
             return;
         }
@@ -162,9 +162,9 @@ public class Battle {
     private Element[] retrieveStones() {
         Element[] stones = new Element[numberOfStonesPerGolem];
 
-        System.out.printf("Prendi %d pietre degli elementi dalle rimanenti:\n",numberOfStonesPerGolem);
+        System.out.printf(", prendi %d pietre degli elementi dalle rimanenti:\n",numberOfStonesPerGolem);
         for (int i = 0; i < numberOfElements; i++){
-            System.out.printf("- %s (rimanenti %d)\n",Element.elementOfValue(i).name(), elementStoneStorage[i]);
+            System.out.printf("- %s (rimanenti %d)\n",Element.elementOfValue(i).toString(), elementStoneStorage[i]);
         }
         for (int i = 0; i < numberOfStonesPerGolem; i++) {
             Element chosenElement;
@@ -199,8 +199,8 @@ public class Battle {
         String[][] balanceMatrix = new String[numberOfElements+1][numberOfElements+1];
         balanceMatrix[0][0] = "";
         for (int i = 0; i < numberOfElements; i++) {
-            balanceMatrix[0][i+1] = Element.elementOfValue(i).name();
-            balanceMatrix[i+1][0] = Element.elementOfValue(i).name();
+            balanceMatrix[0][i+1] = Element.elementOfValue(i).toString();
+            balanceMatrix[i+1][0] = Element.elementOfValue(i).toString();
         }
 
         for (int i = 0; i < numberOfElements; i++) {

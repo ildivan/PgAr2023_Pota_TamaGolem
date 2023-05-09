@@ -6,6 +6,8 @@ import it.kibo.fp.lib.InputData;
 import com.github.lalyos.jfiglet.FigletFont;
 
 public class TamaMenu {
+    private static final String SEPARATOR = "-----------------------------------------------------";
+
     public static void setPlayerName(Player player) {
         Menu.clearConsole();
         player.setName(InputData.readString(String.format("Il nome attuale e' %s, inserisci quello nuovo: ", player.getName()), false));
@@ -18,7 +20,7 @@ public class TamaMenu {
 
     public static int mainMenu() {
         Menu.clearConsole();
-        String[] entries = {"Nuova Partita", "Dichiara nomi giocatori", "Stampa vincitore"};
+        String[] entries = {"Nuova Partita", "Imposta nomi giocatori", "Stampa vincitore"};
         Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
         return tamaMenu.choose();
     }
@@ -45,4 +47,8 @@ public class TamaMenu {
 			System.in.read();
 		} catch (Exception e) {}
 	}
+
+    public static void printSeparator() {
+        System.out.println(SEPARATOR);
+    }
 }

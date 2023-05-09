@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
+/* Inflicted damage based on attacks of elements used in rotation.
+ * The golem continues to be alive until the health points are reset.
+ */
 public class TamaGolem {
     private Deque<Element> elementStones;
     private int healthPoints;
@@ -44,6 +47,3 @@ public class TamaGolem {
     }
 
 }
-/* Inflicted damage based on attacks of elements used in rotation.
-* The golem continues to be alive until the health points are reset
-*/

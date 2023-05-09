@@ -2,6 +2,9 @@ package pota;
 
 import pota.error.NoMoreGolemsException;
 
+/* count of Golems remaining to each player, with the appropriate remaining health points.
+ * They are reduced during the game according to the damage taken.
+ */
 public class Team {
     private TamaGolem currentGolem;
     private int remainingGolems;
@@ -25,7 +28,3 @@ public class Team {
         throw new NoMoreGolemsException();
     }
 }
-
-/* count of Golems remaining to each player, with the appropriate remaining health points.
-* They are reduced during the game according to the damage taken
-*/

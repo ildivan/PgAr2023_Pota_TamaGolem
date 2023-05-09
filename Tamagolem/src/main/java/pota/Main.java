@@ -1,11 +1,9 @@
 package pota;
 
-import pota.element.ElementsBalance;
+import it.kibo.fp.lib.Menu;
 
 public class Main {
     public static void main(String[] args) {
-        ElementsBalance table = ElementsBalance.newRandomBalance(10,12);
-
         Player player1 = new Player("Giocatore 1");
         Player player2 = new Player("Giocatore 2");
 
@@ -20,8 +18,10 @@ public class Main {
     }
 
     public static void newGame(Player player1, Player player2) {
-        Battle battle = new Battle(player1, player2, 10, 40);
+        Battle battle = new Battle(player1, player2, 4, 40);
+        Menu.clearConsole();
         battle.start();
+        TamaMenu.pressEnterToContinue();
     }
 
     public static void setPlayersNames(Player player1, Player player2) {
