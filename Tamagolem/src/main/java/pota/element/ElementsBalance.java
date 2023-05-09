@@ -1,8 +1,19 @@
 package pota.element;
 
+/**
+ * Class used to generate and store the balance between a given amount of elements.
+ * It generates a random balance using a matrix that has the following requirements:
+ * - Has to be antisymmetric.
+ * - Values in the same row or column must sum to zero.
+ * - The values must be in the range -maxDamage and maxDamage.
+ */
 public class ElementsBalance {
     private final int[][] elementsEffects;
 
+    /**
+     * Use intended for testing purposes and in {@link #newRandomBalance(int, int)}
+     * @param elementsEffects the table with the damages.
+     */
     public ElementsBalance(int[][] elementsEffects){
         this.elementsEffects = new int[elementsEffects.length][];
         for (int i = 0; i < elementsEffects.length; i++) {
@@ -10,7 +21,14 @@ public class ElementsBalance {
         }
     }
 
+    /**
+     * Static method that returns a new instance of ElementsBalance with a random damage table inside.
+     * @param numberOfElements The size of the damage table.
+     * @param maxDamage Tells the algorithm to generate only values between -maxDamage and maxDamage.
+     * @return Instance of ElementsBalance.
+     */
     public static ElementsBalance newRandomBalance(int numberOfElements, int maxDamage){
+        //The algorithms work differently depending on the parity of numberOfElements.
         boolean oddNumberOfElements = numberOfElements % 2 != 0;
         int[][] damageTable = new int[numberOfElements][numberOfElements];
         int[] rowsPartialSum = new int[numberOfElements];
@@ -33,12 +51,13 @@ public class ElementsBalance {
                 damageTable[i][numberOfElements - i - 1] = -2*rowsPartialSum[i];
             }
         }
+        //Adjusts the elements near the center of the matrix if the number of elements in odd.
         if (oddNumberOfElements) {
             damageTable[numberOfElements / 2 - 1][numberOfElements / 2]
                     = generateRandomDamage(maxDamage, 0, 1);
             damageTable[numberOfElements / 2 - 1][numberOfElements / 2 + 1]
                     = -damageTable[numberOfElements / 2 - 1][numberOfElements / 2];
-        } else {
+        } else {//Adjusts the elements near the center of the matrix if the number of elements in even.
             damageTable[numberOfElements / 2 - 2][numberOfElements / 2]
                     = generateRandomDamage(maxDamage / 2, damageTable[numberOfElements / 2 - 2][numberOfElements / 2 - 1], 1);
             damageTable[numberOfElements / 2 - 1][numberOfElements / 2]
@@ -54,6 +73,7 @@ public class ElementsBalance {
         return new ElementsBalance(damageTable);
     }
 
+    //Makes the upper triangle of the matrix symmetric.
     private static void symmetrizeUpperTriangle(int[][] matrix) {
         int length = matrix.length;
         for (int i = 0; i <= length/2; i++) {
@@ -63,6 +83,7 @@ public class ElementsBalance {
         }
     }
 
+    //Transforms the matrix from a triangular matrix to an antisymmetric matrix.
     private static void toAntiSymmetricMatrix(int[][] matrix) {
         int  length = matrix.length;
         for (int i = 0; i < length-1; i++) {
