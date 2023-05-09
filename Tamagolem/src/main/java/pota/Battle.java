@@ -15,6 +15,7 @@ import java.util.Random;
 public class Battle {
 
     private final int numberOfElements;
+    private final int numberOfGolemsPerTeam;
     private final int numberOfStonesPerGolem;
     private final int golemHealth;
     private final ElementsBalance balance;
@@ -30,7 +31,7 @@ public class Battle {
 
         balance = ElementsBalance.newRandomBalance(numberOfElements,golemHealth);
         numberOfStonesPerGolem = (int) Math.ceil((numberOfElements+1.0)/3.0) + 1;
-        int numberOfGolemsPerTeam
+        numberOfGolemsPerTeam
                 = (int) Math.ceil((numberOfElements-1.0)*(numberOfElements-2.0)/(2.0*numberOfStonesPerGolem));
 
         int numberOfStonesPerElement
@@ -41,11 +42,12 @@ public class Battle {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
 
-        firstPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
-        secondPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
+
     }
 
     public void start(){
+        firstPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
+        secondPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
 
         Random random = new Random();
         if(random.nextBoolean()){
@@ -63,6 +65,7 @@ public class Battle {
              * according to the algorithm used to make the elements react with each other */
             while (true) {
                 try {
+                    printSeparator();
                     nextAttack();
                     printGolemsHealth();
                 } catch (AttackWithDeadGolemException e) {
@@ -79,19 +82,28 @@ public class Battle {
                 }
             }
         }catch(NoMoreGolemsException e){
-            /* Through the elimination of all of a player's Golems, the winner is declared. */
+            /* When all the Golems of a player are dead, the winner is declared. */
             if(!firstPlayer.getTeam().getCurrentGolem().isAlive()){
                 System.out.printf("Vince %s!\n",secondPlayer.getName());
             }else{
                 System.out.printf("Vince %s!\n",firstPlayer.getName());
             }
+            System.out.println("\n\nTABELLA DEI DANNI: ");
             printElementBalance();
         }
 
     }
 
-    private void printGolemsHealth() {
+    private void printSeparator() {
+        System.out.println("-----------------------------------------------------");
+    }
 
+    private void printGolemsHealth() {
+        System.out.println("Salute rimanente dei golem: ");
+        System.out.printf("Golem di %s: %d/%d\n",
+                firstPlayer.getName(),firstPlayer.getTeam().getCurrentGolem().getHealthPoints(),golemHealth);
+        System.out.printf("Golem di %s: %d/%d\n",
+                secondPlayer.getName(),secondPlayer.getTeam().getCurrentGolem().getHealthPoints(),golemHealth);
     }
 
     private void nextAttack() {
@@ -188,7 +200,7 @@ public class Battle {
         printer.print(getBalance());
     }
 
-    public String[][] getBalance() {
+    private String[][] getBalance() {
         String[][] balanceMatrix = new String[numberOfElements+1][numberOfElements+1];
         balanceMatrix[0][0] = "";
         for (int i = 0; i < numberOfElements; i++) {
