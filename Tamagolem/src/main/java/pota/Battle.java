@@ -13,15 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents a battle between TamaGolems.
+ */
 public class Battle {
 
-    private final int numberOfElements;
-    private final int numberOfGolemsPerTeam;
-    private final int numberOfStonesPerGolem;
-    private final int numberOfStonesPerElement;
-    private final int golemHealth;
-    private ElementsBalance balance;
-    private final int[] elementStoneStorage;
+    private final int numberOfElements; //The number of elements the battle will use.
+    private final int numberOfGolemsPerTeam; //The number of golems that the player has.
+    private final int numberOfStonesPerGolem; //The amount of stones that a golem can retain.
+    private final int numberOfStonesPerElement; //The amount of stones that are stored for each element.
+    private final int golemHealth; //The max health of a golem.
+    private ElementsBalance balance; //The balance between elements, represents the damages between them.
+    private final int[] elementStoneStorage; //An array with the number of stones remaining for each element.
     private Player firstPlayer;
     private Player secondPlayer;
 
