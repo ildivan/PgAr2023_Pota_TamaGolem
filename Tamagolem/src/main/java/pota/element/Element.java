@@ -2,6 +2,9 @@ package pota.element;
 
 import it.kibo.fp.lib.AnsiColors;
 
+/**
+ * Enum for the existing elements
+ */
 public enum Element {
     FIRE(AnsiColors.RED + "FIRE" + AnsiColors.RESET),
     WATER(AnsiColors.BLUE + "WATER" + AnsiColors.RESET),
@@ -14,15 +17,10 @@ public enum Element {
     CHAOS(AnsiColors.CYAN_BACKGROUND + "CHAOS" + AnsiColors.RESET),
     LIGHTNING(AnsiColors.YELLOW_BACKGROUND + "LIGHTNING"+AnsiColors.RESET);
 
-    /* List of elements that can be used in combat.
-    * Depending on the desired difficulty,
-    * the player can choose the desired amount of elements up to a maximum of ten (i.e., all of them),
-    * which will be selected by the order in which they are entered into the program.*/
+    private static final String ELEMENT_DOES_NOT_EXISTS = AnsiColors.RED + "Element does not exist" + AnsiColors.RESET;
+    private final String element; //Used to make elements name colored.
 
-    private static final String ELEMENT_NOT_EXISTS = AnsiColors.RED + "Element does not exist" + AnsiColors.RESET;
-    private String element;
-
-    private Element(String element) {
+    Element(String element) {
         this.element = element;
     }
 
@@ -31,17 +29,27 @@ public enum Element {
         return element;
     }
 
-    public static Element elementOfValue(int value){   /* Elements identified by their position value */
+    /**
+     * Gets the element given its value in the enum
+     * @param value the value of the element (e.g:  0 -> Element.FIRE)
+     * @return The element corresponding to the value
+     */
+    public static Element elementOfValue(int value){   /* Elements identified by its position value */
         for (Element e : Element.values()) {
             if(e.ordinal() == value) return e;
         }
-        throw new IllegalArgumentException(ELEMENT_NOT_EXISTS);
+        throw new IllegalArgumentException(ELEMENT_DOES_NOT_EXISTS);
     }
 
-    public static Element elementOfName(String name) {     /* Elements identified by their name */
+    /**
+     * Gets the element given its string name
+     * @param name the name of the element (i.e:  "fIrE" -> Element.FIRE)
+     * @return The element corresponding to the string
+     */
+    public static Element elementOfName(String name) {     /* Elements identified by its name */
         for (Element e : Element.values()) {
             if(e.name().equals(name.toUpperCase().trim())) return e;
         }
-        throw new IllegalArgumentException(ELEMENT_NOT_EXISTS);
+        throw new IllegalArgumentException(ELEMENT_DOES_NOT_EXISTS);
     }
 }
