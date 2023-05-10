@@ -34,7 +34,7 @@ public class Main {
         int numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
         while(numberOfElements>10 | numberOfElements<3){
             System.out.println("Puoi evocare un minimo di 3 ed un massimo di 10 elementi!");
-            TamaMenu.pauseProgram();
+            TamaMenu.pauseTwoSeconds();
             Menu.clearConsole();
             numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
         }

@@ -6,19 +6,26 @@ import it.kibo.fp.lib.InputData;
 
 import com.github.lalyos.jfiglet.FigletFont;
 
+/**
+ * The <strong>TamaMenu</strong> class contains all the static methods 
+ * called by other classes that need to print contents in Menus.
+ * It also contains other features, such as pausing the program until the return key is pressed.
+ */
 public class TamaMenu {
-    private static final String SEPARATOR = "-----------------------------------------------------";
 
+    // Clears the console and ask user to insert the new Playe's name.
     public static void setPlayerName(Player player) {
         Menu.clearConsole();
-        player.setName(InputData.readString(String.format("Il nome attuale e' %s, inserisci quello nuovo: ", player.getName()), false));
+        player.setName(InputData.readString(String.format(Literals.CURRENT_PLAYER_NAME, player.getName()), false));
     }
 
+    // Prints the table containing the Element balance.
     public static void printElementBalance(String[][] balance) {
         final PrettyPrinter printer = new PrettyPrinter(System.out);
         printer.print(balance);
     }
 
+    // Clears the console, prints the welcome writing and prints the main menu.
     public static int mainMenu() {
         Menu.clearConsole();
         welcome();
@@ -27,26 +34,30 @@ public class TamaMenu {
         return tamaMenu.choose();
     }
 
+    // Prints the menu for changing players' names.
     public static int setPlayersNamesMenu(Player player1, Player player2) {
         Menu.clearConsole();
-        String[] entries = {String.format("Modifica nome: %s", player1.getName()), String.format("Modifica nome: %s", player2.getName())};
+        String[] entries = {String.format(Literals.MODIFICA_NOME, player1.getName()), String.format(Literals.MODIFICA_NOME, player2.getName())};
         Menu playerNamesMenu = new Menu("Modifica nomi giocatori", entries, true, true, false);
         return playerNamesMenu.choose();
     }
 
+    // Pauses the program until user press the return key.
     public static void pressEnterToContinue() {
-		System.out.print("\n\nPremi Invio per continuare...");
+		System.out.print(Literals.PRESS_ENTER_TO_CONTINUE);
 		try {
 			System.in.read();
 		} catch (Exception e) {}
 	}
 
-    public static void pauseProgram() {
+    // Pauses the program for 2 seconds.
+    public static void pauseTwoSeconds() {
         try {
             Menu.wait(2000);
         } catch (InterruptedException e1) {}
     }
 
+    // Prints the ASCII art of the winner's name.
     public static void printWinner(Player player) {
         try {
             String playerName = new String(player.getName());
@@ -57,10 +68,12 @@ public class TamaMenu {
         }
     }
 
+    // Prints a line separator.
     public static void printSeparator() {
-        System.out.println(SEPARATOR);
+        System.out.println(Literals.SEPARATOR);
     }
 
+    // Prints the welcome ASCII art text.
     public static void welcome() {
         try {
             System.out.println(FigletFont.convertOneLine("Tamagolem"));

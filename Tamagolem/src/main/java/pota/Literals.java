@@ -20,4 +20,8 @@ public class Literals {
     public static final String SELECT_ELEMENTS_MESSAGE = "%s, prendi %d pietre degli elementi dalle rimanenti per evocare il prossimo golem:\n";
     public static final String ELEMENT_STONE_OUT_OF_STORAGE_MESSAGE = "Le pietre di tipo %s sono finite!\n";
     public static final String INSERT_ELEMENT_NAME = "\n\nInserisci il nome dell' elemento: ";
+    public static final String MODIFICA_NOME = "Modifica nome: %s";
+    public static final String PRESS_ENTER_TO_CONTINUE = "\n\nPremi Invio per continuare...";
+    public static final String CURRENT_PLAYER_NAME = "Il nome attuale e' %s, inserisci quello nuovo: ";
+    public static final String SEPARATOR = "-----------------------------------------------------";
 }
