@@ -6,8 +6,8 @@ import it.kibo.fp.lib.PrettyStrings;
 
 public class Main {
     public static void main(String[] args) {
-        Player player1 = new Player("Giocatore 1");
-        Player player2 = new Player("Giocatore 2");
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
         //main menu
         do {
             switch(TamaMenu.mainMenu()) {
@@ -21,7 +21,7 @@ public class Main {
     //Starts a new game, the number of elements will be prompted.
     public static void newGame(Player player1, Player player2) {
         Menu.clearConsole();
-        System.out.println(PrettyStrings.frame("Battaglia", 60, true, false));
+        System.out.println(PrettyStrings.frame("Battle", 60, true, false));
         
         int numberOfElements = getNumberOfElements();//numberOfElements must be between 3 and 10
         Battle battle = new Battle(player1, player2, numberOfElements, 100);
@@ -31,12 +31,12 @@ public class Main {
 
     //Gets a number of elements within bounds from the  user.
     private static int getNumberOfElements() {
-        int numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
+        int numberOfElements = InputData.readInteger("How many elements do you want to evoke? [min 3, max 10]: ");
         while(numberOfElements>10 | numberOfElements<3){
-            System.out.println("Puoi evocare un minimo di 3 ed un massimo di 10 elementi!");
+            System.out.println("You can summon a minimum of 3 and a maximum of 10 items!");
             TamaMenu.pauseProgram();
             Menu.clearConsole();
-            numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
+            numberOfElements = InputData.readInteger("How many elements do you want to evoke? [min 3, max 10]: ");
         }
         return numberOfElements;
     }

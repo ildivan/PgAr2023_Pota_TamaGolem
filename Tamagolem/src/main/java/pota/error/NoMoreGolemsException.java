@@ -5,7 +5,7 @@ package pota.error;
  */
 public class NoMoreGolemsException extends RuntimeException{
     public NoMoreGolemsException() {
-        this("No more golems.");
+        this("No more TamaGolems.");
     }
 
     public NoMoreGolemsException(String message) {

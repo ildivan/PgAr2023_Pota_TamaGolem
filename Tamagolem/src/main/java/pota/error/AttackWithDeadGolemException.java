@@ -5,7 +5,7 @@ package pota.error;
  */
 public class AttackWithDeadGolemException extends RuntimeException{
     public AttackWithDeadGolemException() {
-        this("Tried attacking with a dead golem");
+        this("Tried attacking with a dead TamaGolem");
     }
 
     public AttackWithDeadGolemException(String message) {

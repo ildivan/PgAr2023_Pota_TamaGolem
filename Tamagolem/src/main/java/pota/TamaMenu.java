@@ -22,20 +22,20 @@ public class TamaMenu {
     public static int mainMenu() {
         Menu.clearConsole();
         welcome();
-        String[] entries = {"Nuova Partita", "Imposta nomi giocatori"};
+        String[] entries = {"New match", "Set player names"};
         Menu tamaMenu = new Menu("Tama Menu", entries, true, true, false);
         return tamaMenu.choose();
     }
 
     public static int setPlayersNamesMenu(Player player1, Player player2) {
         Menu.clearConsole();
-        String[] entries = {String.format("Modifica nome: %s", player1.getName()), String.format("Modifica nome: %s", player2.getName())};
-        Menu playerNamesMenu = new Menu("Modifica nomi giocatori", entries, true, true, false);
+        String[] entries = {String.format("Edit name: %s", player1.getName()), String.format("Edit name: %s", player2.getName())};
+        Menu playerNamesMenu = new Menu("Edit players' name", entries, true, true, false);
         return playerNamesMenu.choose();
     }
 
     public static void pressEnterToContinue() {
-		System.out.print("\n\nPremi Invio per continuare...");
+		System.out.print("\n\nPress Enter to continue...");
 		try {
 			System.in.read();
 		} catch (Exception e) {}
@@ -51,7 +51,7 @@ public class TamaMenu {
         try {
             String playerName = new String(player.getName());
             playerName = playerName.substring(5, playerName.length()-4);
-            System.out.println(FigletFont.convertOneLine(String.format("Vince  %s", playerName)));
+            System.out.println(FigletFont.convertOneLine(String.format("The winner is  %s", playerName)));
         } catch (Exception e) {
             e.printStackTrace();
         }
