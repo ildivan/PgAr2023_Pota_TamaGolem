@@ -36,7 +36,7 @@ public class TamaMenu {
         String asciiArt1 = "";
         try {
             asciiArt1 = FigletFont.convertOneLine(String.format("%s  Wins", player.getName()));
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
         System.out.println(asciiArt1);
         pressEnterToContinue();
     }

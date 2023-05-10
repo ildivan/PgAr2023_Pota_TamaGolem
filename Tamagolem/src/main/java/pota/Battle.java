@@ -1,11 +1,11 @@
 package pota;
 
+import it.kibo.fp.lib.AnsiColors;
 import it.kibo.fp.lib.InputData;
 import pota.element.Element;
 import pota.element.ElementsBalance;
 import pota.error.AttackWithDeadGolemException;
 import pota.error.NoMoreGolemsException;
-import pota.error.SameElementStonesException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,9 +83,9 @@ public class Battle {
         }catch(NoMoreGolemsException e){
             /* When all the Golems of a player are dead, the winner is declared. */
             if(!firstPlayer.getTeam().getCurrentGolem().isAlive()){
-                System.out.printf("Vince %s!\n",secondPlayer.getName());
+                TamaMenu.printWinner(secondPlayer);
             }else{
-                System.out.printf("Vince %s!\n",firstPlayer.getName());
+                TamaMenu.printWinner(firstPlayer);
             }
             System.out.println("\n\nTABELLA DEI DANNI: ");
             TamaMenu.printElementBalance(getBalance());
@@ -119,7 +119,7 @@ public class Battle {
             }else if(damage < 0) {
                 firstPlayerCurrentGolem.damageGolem(-damage);
                 System.out.printf("Il golem di %s fa danno %d al golem di %s\n",
-                        secondPlayer.getName(),damage,firstPlayer.getName());
+                        secondPlayer.getName(),-damage,firstPlayer.getName());
             }
             return;
             // Each turn it is printed which Golem was attacked and the value of the damage
@@ -141,22 +141,25 @@ public class Battle {
 
         summonerTeam.nextGolem();
         
-        System.out.printf("%s",summoner.getName());
-        Element[] stones = retrieveStones();
+        while(true) {
+            System.out.printf("%s",summoner.getName());
+            Element[] stones = retrieveStones();
 
-        List<Element> summonerStones = Arrays.asList(stones);
-        List<Element> otherGolemStones;
-        if(otherTeam.getCurrentGolem() != null) {
-            otherGolemStones = otherTeam.getCurrentGolem().getElementStones();
-        }else{
-            otherGolemStones = new ArrayList<>();
-        }
+            List<Element> summonerStones = Arrays.asList(stones);
+            List<Element> otherGolemStones;
+            if(otherTeam.getCurrentGolem() != null) {
+                otherGolemStones = otherTeam.getCurrentGolem().getElementStones();
+            }else{
+                otherGolemStones = new ArrayList<>();
+            }
 
-        if(!summonerStones.equals(otherGolemStones)) {
-            summonerTeam.getCurrentGolem().setElementsStones(stones);
-            return;
+            if(!summonerStones.equals(otherGolemStones)) {
+                summonerTeam.getCurrentGolem().setElementsStones(stones);
+                return;
+            }
+            System.out.println(AnsiColors.RED + "I due Golem non possono avere le stesse pietre!" + AnsiColors.RESET);
+            returnStonesToStorage(stones);
         }
-        throw new SameElementStonesException();
     }
 
     private Element[] retrieveStones() {
@@ -167,10 +170,11 @@ public class Battle {
             System.out.printf("- %s (rimanenti %d)\n",Element.elementOfValue(i).toString(), elementStoneStorage[i]);
         }
         for (int i = 0; i < numberOfStonesPerGolem; i++) {
-            Element chosenElement;
-            do{
+            Element chosenElement= readElement();
+            while(elementStoneStorage[chosenElement.ordinal()] <= 0){
+                System.out.printf("Le pietre di tipo %s sono finite!\n", chosenElement);
                 chosenElement = readElement();
-            }while(elementStoneStorage[chosenElement.ordinal()] <= 0);
+            }
             stones[i] = chosenElement;
             elementStoneStorage[chosenElement.ordinal()]--;
         }
@@ -195,12 +199,18 @@ public class Battle {
         }
     }
 
+    private void returnStonesToStorage(Element... stones) {
+        for (Element stone : stones) {
+            elementStoneStorage[stone.ordinal()]++;
+        }
+    }
+
     private String[][] getBalance() {
         String[][] balanceMatrix = new String[numberOfElements+1][numberOfElements+1];
         balanceMatrix[0][0] = "";
         for (int i = 0; i < numberOfElements; i++) {
-            balanceMatrix[0][i+1] = Element.elementOfValue(i).toString();
-            balanceMatrix[i+1][0] = Element.elementOfValue(i).toString();
+            balanceMatrix[0][i+1] = Element.elementOfValue(i).name();
+            balanceMatrix[i+1][0] = Element.elementOfValue(i).name();
         }
 
         for (int i = 0; i < numberOfElements; i++) {

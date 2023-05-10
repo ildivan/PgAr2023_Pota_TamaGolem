@@ -42,7 +42,7 @@ public final class PrettyPrinter {
         printPreparedTable(table, widths, getHorizontalBorder(widths));
     }
 
-    private void printPreparedTable(String[][] table, int widths[], String horizontalBorder) {
+    private void printPreparedTable(String[][] table, int[] widths, String horizontalBorder) {
         final int lineLength = horizontalBorder.length();
         out.println(horizontalBorder);
         for ( final String[] row : table ) {

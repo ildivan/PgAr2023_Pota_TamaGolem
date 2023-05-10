@@ -40,6 +40,7 @@ public class TamaGolem {
 
     public void damageGolem(int amountOfHealthToRemove) {
         healthPoints -= amountOfHealthToRemove;
+        if(healthPoints < 0) healthPoints = 0;
     }
 
     public boolean isAlive() {
