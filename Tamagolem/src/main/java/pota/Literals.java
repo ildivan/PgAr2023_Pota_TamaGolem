@@ -2,6 +2,9 @@ package pota;
 
 import it.kibo.fp.lib.AnsiColors;
 
+/**
+ * Stores the messages used in other parts of the project
+ */
 public class Literals {
     public static final String DEAD_GOLEM_MESSAGE_MESSAGE = "Il golem di %s è morto!\n";
     public static final String DAMAGE_TABLE = "\n\nTABELLA DEI DANNI: ";

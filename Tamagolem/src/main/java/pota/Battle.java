@@ -20,18 +20,22 @@ public class Battle {
     private final int numberOfStonesPerGolem;
     private final int numberOfStonesPerElement;
     private final int golemHealth;
-    private final ElementsBalance balance;
+    private ElementsBalance balance;
     private final int[] elementStoneStorage;
     private Player firstPlayer;
     private Player secondPlayer;
 
+    /**
+     * Constructor for the Battle class.
+     * @param firstPlayer The first player of the battle.
+     * @param secondPlayer The second player of the battle.
+     * @param numberOfElements The number of elements that the battle will use.
+     * @param golemHealth The max health of a golem.
+     */
     public Battle(Player firstPlayer, Player secondPlayer, int numberOfElements, int golemHealth) {
         this.numberOfElements = numberOfElements;
         this.golemHealth = golemHealth;
-    //The maximum number of items chosen by the user is 10
-    //in case of lower quantity they are considered up to the desired number in the order they are marked in the class "Element"
 
-        balance = ElementsBalance.newRandomBalance(numberOfElements,golemHealth);
         numberOfStonesPerGolem = (int) Math.ceil((numberOfElements+1.0)/3.0) + 1;
         numberOfGolemsPerTeam
                 = (int) Math.ceil((numberOfElements-1.0)*(numberOfElements-2.0)/(2.0*numberOfStonesPerGolem));
@@ -47,10 +51,18 @@ public class Battle {
 
     }
 
+    /**
+     * Starts the battle with the parameters passed in the constructor, it can be called any amount of times
+     * as it will generate a new balance every time and reset the Team of the two Players, but the battle will have
+     * always the same amount of elements and the maximum health of golems will be the same.
+     */
     public void start(){
+        //Setup of the battle
+        balance = ElementsBalance.newRandomBalance(numberOfElements,golemHealth);
         firstPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
         secondPlayer.createNewTeam(numberOfGolemsPerTeam, golemHealth);
 
+        //Starting player is chosen.
         Random random = new Random();
         if(random.nextBoolean()){
             Player temp = firstPlayer;
@@ -58,8 +70,11 @@ public class Battle {
             secondPlayer = temp;
         }
 
+        //Summon the first golems of the players.
         summonFirstPlayerGolem();
         summonSecondPlayerGolem();
+
+        //Print initial health of the golems.
         printGolemsHealth();
         try{
             /* Until the golems die, attacks are thrown consecutively and cyclically
@@ -74,10 +89,12 @@ public class Battle {
                     if (!firstPlayer.getTeam().getCurrentGolem().isAlive()) {
                         System.out.printf(Literals.DEAD_GOLEM_MESSAGE_MESSAGE,firstPlayer.getName());
                         returnStonesToStorage(firstPlayer.getTeam().getCurrentGolem());
+                        //Summon new golem for first player
                         summonFirstPlayerGolem();
                     } else {
                         System.out.printf(Literals.DEAD_GOLEM_MESSAGE_MESSAGE,secondPlayer.getName());
                         returnStonesToStorage(secondPlayer.getTeam().getCurrentGolem());
+                        //Summon new golem for second player
                         summonSecondPlayerGolem();
                     }
                 }
@@ -89,12 +106,14 @@ public class Battle {
             }else{
                 TamaMenu.printWinner(firstPlayer);
             }
+            //Prints the element balance as a matrix.
             System.out.println(Literals.DAMAGE_TABLE);
             TamaMenu.printElementBalance(getBalance());
         }
 
     }
 
+    //Prints the remaining health of both the player's golem.
     private void printGolemsHealth() {
         System.out.println(Literals.GOLEMS_REMAINING_HEALTH);
         System.out.printf(Literals.GOLEM_HEALTH_MESSAGE,
@@ -103,6 +122,7 @@ public class Battle {
                 secondPlayer.getName(),secondPlayer.getTeam().getCurrentGolem().getHealthPoints(),golemHealth);
     }
 
+    //Calculates next attack, if not possible throws an exception.
     private void nextAttack() {
         TamaGolem firstPlayerCurrentGolem = firstPlayer.getTeam().getCurrentGolem();
         TamaGolem secondPlayerCurrentGolem = secondPlayer.getTeam().getCurrentGolem();
@@ -138,6 +158,7 @@ public class Battle {
         summonGolem(secondPlayer,firstPlayer);
     }
 
+    //Summons a golem for the player, checks that the golems of the two players have different stones.
     private void summonGolem(Player summoner, Player other){
         Team summonerTeam = summoner.getTeam();
         Team otherTeam = other.getTeam();
@@ -149,6 +170,8 @@ public class Battle {
 
             List<Element> summonerStones = Arrays.asList(stones);
             List<Element> otherGolemStones;
+
+            //If the current golem is null it means that it is the first time a golem is summoned in the battle.
             if(otherTeam.getCurrentGolem() != null) {
                 otherGolemStones = otherTeam.getCurrentGolem().getElementStones();
             }else{
@@ -159,18 +182,21 @@ public class Battle {
                 summonerTeam.getCurrentGolem().setElementsStones(stones);
                 return;
             }
+
             System.out.println(Literals.SAME_STONES_ERROR);
             TamaMenu.pauseProgram();
             returnStonesToStorage(stones);
         }
     }
 
+    //Gets the element stones to give to a golem from the user.
     private Element[] retrieveStones(String nameSummoner) {
         do {
             Element[] stones = new Element[numberOfStonesPerGolem];
             for (int i = 0; i <= numberOfStonesPerGolem; i++) {
                 Menu.clearConsole();
-                System.out.println(PrettyStrings.frame(Literals.BATTLE_MESSAGE, 60, true, false));
+                System.out.println(PrettyStrings.frame(Literals.BATTLE_MESSAGE,
+                        60, true, false));
 
                 System.out.printf(Literals.SELECT_ELEMENTS_MESSAGE,
                                      nameSummoner, numberOfStonesPerGolem);
