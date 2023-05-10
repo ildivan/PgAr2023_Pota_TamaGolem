@@ -187,7 +187,7 @@ public class Battle {
             }
 
             System.out.println(Literals.SAME_STONES_ERROR);
-            TamaMenu.pauseProgram();
+            TamaMenu.pauseTwoSeconds();
             returnStonesToStorage(stones);
         }
     }
@@ -243,7 +243,7 @@ public class Battle {
         while(elementStoneStorage[chosenElement.ordinal()] <= 0){
             System.out.printf(Literals.ELEMENT_STONE_OUT_OF_STORAGE_MESSAGE, chosenElement);
             chosenElement = readElement();
-            TamaMenu.pauseProgram();
+            TamaMenu.pauseTwoSeconds();
         }
         return chosenElement;
     }
