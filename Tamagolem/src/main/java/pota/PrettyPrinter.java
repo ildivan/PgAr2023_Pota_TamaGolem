@@ -3,6 +3,8 @@ package pota;
 import java.io.PrintStream;
 
 import static java.lang.String.format;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class PrettyPrinter {
 
@@ -88,7 +90,7 @@ public final class PrettyPrinter {
         for ( final String[] row : rows ) {
             if ( row != null ) {
                 for ( int c = 0; c < widths.length; c++ ) {
-                    final String cv = getCellValue(safeGet(row, c, asNull));
+                    final String cv = patternMatch(getCellValue(safeGet(row, c, asNull)));
                     final int l = cv.length();
                     if ( widths[c] < l ) {
                         widths[c] = l;
@@ -99,7 +101,9 @@ public final class PrettyPrinter {
     }
 
     private static String padRight(String s, int n) {
-        return format("%1$-" + n + "s", s);
+        String fixPattern = patternMatch(s);
+        int totalLength = n - fixPattern.length() + s.length();
+        return format("%" + totalLength + "s", s);
     }
 
     private static String safeGet(String[] array, int index, String defaultValue) {
@@ -108,6 +112,11 @@ public final class PrettyPrinter {
 
     private String getCellValue(Object value) {
         return value == null ? asNull : value.toString();
+    }
+
+    private static String patternMatch(String str) {
+        Matcher matcher = Pattern.compile("[A-Z]+").matcher(str);
+        return matcher.find() ? matcher.group() : str;
     }
 
 }

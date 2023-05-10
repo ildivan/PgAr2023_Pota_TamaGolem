@@ -3,6 +3,8 @@ package pota;
 import it.kibo.fp.lib.Menu;
 import it.kibo.fp.lib.InputData;
 
+import java.util.regex.Pattern;
+
 import com.github.lalyos.jfiglet.FigletFont;
 
 public class TamaMenu {
@@ -20,8 +22,9 @@ public class TamaMenu {
 
     public static int mainMenu() {
         Menu.clearConsole();
+        welcome();
         String[] entries = {"Nuova Partita", "Imposta nomi giocatori", "Stampa vincitore"};
-        Menu tamaMenu = new Menu("TamaGolem", entries, true, true, true);
+        Menu tamaMenu = new Menu("Tama Menu", entries, true, true, false);
         return tamaMenu.choose();
     }
 
@@ -32,15 +35,6 @@ public class TamaMenu {
         return playerNamesMenu.choose();
     }
 
-    public static void printWinner(Player player) {
-        String asciiArt1 = "";
-        try {
-            asciiArt1 = FigletFont.convertOneLine(String.format("%s  Wins", player.getName()));
-        } catch (Exception ignored) {}
-        System.out.println(asciiArt1);
-        pressEnterToContinue();
-    }
-
     public static void pressEnterToContinue() {
 		System.out.print("\n\nPremi Invio per continuare...");
 		try {
@@ -48,7 +42,23 @@ public class TamaMenu {
 		} catch (Exception e) {}
 	}
 
+    public static void printWinner(Player player) {
+        try {
+            System.out.println(FigletFont.convertOneLine(String.format("Vince  %s", Pattern.compile("[A-Z]+").matcher(player.getName()).group())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void printSeparator() {
         System.out.println(SEPARATOR);
+    }
+
+    public static void welcome() {
+        try {
+            System.out.println(FigletFont.convertOneLine("Tamagolem"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

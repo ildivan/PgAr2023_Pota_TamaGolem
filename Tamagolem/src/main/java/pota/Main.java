@@ -1,6 +1,7 @@
 package pota;
 
 import it.kibo.fp.lib.Menu;
+import it.kibo.fp.lib.PrettyStrings;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,6 +21,7 @@ public class Main {
     public static void newGame(Player player1, Player player2) {
         Battle battle = new Battle(player1, player2, 4, 40);
         Menu.clearConsole();
+        System.out.println(PrettyStrings.frame("Battaglia", 60, true, false));
         battle.start();
         TamaMenu.pressEnterToContinue();
     }
