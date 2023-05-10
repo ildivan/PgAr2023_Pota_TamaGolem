@@ -1,5 +1,6 @@
 package pota;
 
+import it.kibo.fp.lib.InputData;
 import it.kibo.fp.lib.Menu;
 import it.kibo.fp.lib.PrettyStrings;
 
@@ -12,16 +13,25 @@ public class Main {
             switch(TamaMenu.mainMenu()) {
                 case 1 -> newGame(player1, player2);
                 case 2 -> setPlayersNames(player1, player2);
-                case 3 -> TamaMenu.printWinner(player2);
                 case 0 -> { return; }
             }
         } while(true);
     }
 
     public static void newGame(Player player1, Player player2) {
-        Battle battle = new Battle(player1, player2, 4, 40);
+        int numberOfElements=0;
         Menu.clearConsole();
         System.out.println(PrettyStrings.frame("Battaglia", 60, true, false));
+        
+        numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
+        while(numberOfElements>10 | numberOfElements<3){
+            System.out.println("Puoi evocare un minimo di 3 ed un massimo di 10 elementi!");
+            TamaMenu.pauseProgram();
+            Menu.clearConsole(); 
+            numberOfElements = InputData.readInteger("Quanti elementi vuoi evocare [min 3, max 10]: ");
+        }
+       
+        Battle battle = new Battle(player1, player2, numberOfElements, 100); //NumberOfElements must be between 3 and 10
         battle.start();
         TamaMenu.pressEnterToContinue();
     }

@@ -19,6 +19,7 @@ public enum Element {
     * the player can choose the desired amount of elements up to a maximum of ten (i.e., all of them),
     * which will be selected by the order in which they are entered into the program.*/
 
+    private static final String ELEMENT_NOT_EXISTS = AnsiColors.RED + "Element does not exist" + AnsiColors.RESET;
     private String element;
 
     private Element(String element) {
@@ -34,13 +35,13 @@ public enum Element {
         for (Element e : Element.values()) {
             if(e.ordinal() == value) return e;
         }
-        throw new IllegalArgumentException(AnsiColors.RED + "Element does not exist" + AnsiColors.RESET);
+        throw new IllegalArgumentException(ELEMENT_NOT_EXISTS);
     }
 
     public static Element elementOfName(String name) {     /* Elements identified by their name */
         for (Element e : Element.values()) {
             if(e.name().equals(name.toUpperCase().trim())) return e;
         }
-        throw new IllegalArgumentException(AnsiColors.RED + "Element does not exist" + AnsiColors.RESET);
+        throw new IllegalArgumentException(ELEMENT_NOT_EXISTS);
     }
 }

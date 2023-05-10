@@ -2,6 +2,8 @@ package pota;
 
 import it.kibo.fp.lib.AnsiColors;
 import it.kibo.fp.lib.InputData;
+import it.kibo.fp.lib.Menu;
+import it.kibo.fp.lib.PrettyStrings;
 import pota.element.Element;
 import pota.element.ElementsBalance;
 import pota.error.AttackWithDeadGolemException;
@@ -17,6 +19,7 @@ public class Battle {
     private final int numberOfElements;
     private final int numberOfGolemsPerTeam;
     private final int numberOfStonesPerGolem;
+    private final int numberOfStonesPerElement;
     private final int golemHealth;
     private final ElementsBalance balance;
     private final int[] elementStoneStorage;
@@ -34,7 +37,7 @@ public class Battle {
         numberOfGolemsPerTeam
                 = (int) Math.ceil((numberOfElements-1.0)*(numberOfElements-2.0)/(2.0*numberOfStonesPerGolem));
 
-        int numberOfStonesPerElement
+        numberOfStonesPerElement
                 = (int) Math.ceil(2.0*numberOfGolemsPerTeam*numberOfStonesPerGolem/numberOfElements);
         elementStoneStorage = new int[numberOfElements];
         Arrays.fill(elementStoneStorage,numberOfStonesPerElement);
@@ -142,8 +145,7 @@ public class Battle {
         summonerTeam.nextGolem();
         
         while(true) {
-            System.out.printf("%s",summoner.getName());
-            Element[] stones = retrieveStones();
+            Element[] stones = retrieveStones(summoner.getName());
 
             List<Element> summonerStones = Arrays.asList(stones);
             List<Element> otherGolemStones;
@@ -158,33 +160,72 @@ public class Battle {
                 return;
             }
             System.out.println(AnsiColors.RED + "I due Golem non possono avere le stesse pietre!" + AnsiColors.RESET);
+            TamaMenu.pauseProgram();
             returnStonesToStorage(stones);
         }
     }
 
-    private Element[] retrieveStones() {
-        Element[] stones = new Element[numberOfStonesPerGolem];
+    private Element[] retrieveStones(String nameSummoner) {
+        do {
+            Element[] stones = new Element[numberOfStonesPerGolem];
+            for (int i = 0; i <= numberOfStonesPerGolem; i++) {
+                Menu.clearConsole();
+                System.out.println(PrettyStrings.frame("Battaglia: selezione pietre", 60, true, false));
 
-        System.out.printf(", prendi %d pietre degli elementi dalle rimanenti:\n",numberOfStonesPerGolem);
-        for (int i = 0; i < numberOfElements; i++){
-            System.out.printf("- %s (rimanenti %d)\n",Element.elementOfValue(i).toString(), elementStoneStorage[i]);
-        }
-        for (int i = 0; i < numberOfStonesPerGolem; i++) {
-            Element chosenElement= readElement();
-            while(elementStoneStorage[chosenElement.ordinal()] <= 0){
-                System.out.printf("Le pietre di tipo %s sono finite!\n", chosenElement);
-                chosenElement = readElement();
+                System.out.printf("%s, prendi %d pietre degli elementi dalle rimanenti per evocare il prossimo golem:\n",
+                                     nameSummoner, numberOfStonesPerGolem);
+
+                printRemainingStones();
+
+                //Displays the stones that the user has already selected.
+                System.out.print("Hai selezionato: ");
+                for (int j = 0; j < i ; j++) {
+                    System.out.printf("%s ", stones[j]);
+                }
+                
+                if(i == numberOfStonesPerGolem) {
+                    //Prompts the user to confirm the elements he selected, eventually lets the user select them again.
+                    if (InputData.readYesOrNo("\n\nConfermi gli elementi"))
+                        return stones;
+                }else{
+                    Element chosenElement = retrieveStoneFromStorage();
+                    stones[i] = chosenElement;
+                    elementStoneStorage[chosenElement.ordinal()]--;
+                }
             }
-            stones[i] = chosenElement;
-            elementStoneStorage[chosenElement.ordinal()]--;
-        }
-        return stones;
+
+            //returns the previously selected stones before retrieving stones from the beginning.
+            returnStonesToStorage(stones);
+        } while (true);
     }
 
+    //Displays how many stones are left in the storage for each element.
+    private void printRemainingStones() {
+        for (int j = 0; j < numberOfElements; j++){
+            System.out.printf("- %s (%d / %d)\n",
+                                Element.elementOfValue(j).toString(), elementStoneStorage[j],
+                                numberOfStonesPerElement);
+        }
+    }
+
+    //Returns an element chosen by the  user, checks if the stone wanted is in storage,
+    //if not the user has to enter another element.
+    private Element retrieveStoneFromStorage() {
+        Element chosenElement = readElement();
+        while(elementStoneStorage[chosenElement.ordinal()] <= 0){
+            System.out.printf("Le pietre di tipo %s sono finite!\n", chosenElement);
+            chosenElement = readElement();
+            TamaMenu.pauseProgram();
+        }
+        return chosenElement;
+    }
+
+    //Returns an element chosen by the user, checks if the element exists,
+    //if not the user has to enter another element.
     private Element readElement() {
         while(true){
             try{
-                String elementName = InputData.readNonEmptyString("Inserisci il nome di un elemento: ",true);
+                String elementName = InputData.readNonEmptyString("\n\nInserisci il nome dell' elemento: ",true);
                 return Element.elementOfName(elementName);
             }catch(IllegalArgumentException e){
                 System.out.println(e.getMessage());
@@ -209,8 +250,8 @@ public class Battle {
         String[][] balanceMatrix = new String[numberOfElements+1][numberOfElements+1];
         balanceMatrix[0][0] = "";
         for (int i = 0; i < numberOfElements; i++) {
-            balanceMatrix[0][i+1] = Element.elementOfValue(i).name();
-            balanceMatrix[i+1][0] = Element.elementOfValue(i).name();
+            balanceMatrix[0][i+1] = Element.elementOfValue(i).toString();
+            balanceMatrix[i+1][0] = Element.elementOfValue(i).toString();
         }
 
         for (int i = 0; i < numberOfElements; i++) {

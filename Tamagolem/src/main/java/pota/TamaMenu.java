@@ -3,7 +3,6 @@ package pota;
 import it.kibo.fp.lib.Menu;
 import it.kibo.fp.lib.InputData;
 
-import java.util.regex.Pattern;
 
 import com.github.lalyos.jfiglet.FigletFont;
 
@@ -23,7 +22,7 @@ public class TamaMenu {
     public static int mainMenu() {
         Menu.clearConsole();
         welcome();
-        String[] entries = {"Nuova Partita", "Imposta nomi giocatori", "Stampa vincitore"};
+        String[] entries = {"Nuova Partita", "Imposta nomi giocatori"};
         Menu tamaMenu = new Menu("Tama Menu", entries, true, true, false);
         return tamaMenu.choose();
     }
@@ -42,9 +41,17 @@ public class TamaMenu {
 		} catch (Exception e) {}
 	}
 
+    public static void pauseProgram() {
+        try {
+            Menu.wait(2000);
+        } catch (InterruptedException e1) {}
+    }
+
     public static void printWinner(Player player) {
         try {
-            System.out.println(FigletFont.convertOneLine(String.format("Vince  %s", Pattern.compile("[A-Z]+").matcher(player.getName()).group())));
+            String playerName = new String(player.getName());
+            playerName = playerName.substring(5, playerName.length()-4);
+            System.out.println(FigletFont.convertOneLine(String.format("Vince  %s", playerName)));
         } catch (Exception e) {
             e.printStackTrace();
         }
