@@ -7,9 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The <strong>PrettyPrinter</strong> class creates and prints a table starting from a given matrix of Strings.
+ * The <strong>PrettyPrinter</strong> class creates and prints a table starting
+ * from a given matrix of Strings.
  * It creates borders and cells adapting them to the single value length.
- * This class is also compatible with ANSI codes written inside the matrix's values.
+ * This class is also compatible with ANSI codes written inside the matrix's
+ * values.
  */
 public final class PrettyPrinter {
 
@@ -31,9 +33,10 @@ public final class PrettyPrinter {
 
     /**
      * Constructor that creates a <code>PrettyPrinter</code> simple object.
-     * It requires a PrintStream to be passed. 
+     * It requires a PrintStream to be passed.
      * Then it calls the contructor {@link #PrettyPrinter(PrintStream, String)}
      * with the PrintStream given and the default string for null values "(NULL)".
+     * 
      * @param out The PrintStream needed to print the table.
      */
     public PrettyPrinter(PrintStream out) {
@@ -41,17 +44,18 @@ public final class PrettyPrinter {
     }
 
     /**
-     * Constructor that creates a <code>PrettyPrinter</code> object specifying 
+     * Constructor that creates a <code>PrettyPrinter</code> object specifying
      * the PrintStream and the default value to print for null values.
      * If the PrintStream or the default String is null, an error is thrown.
-     * @param out The PrintStream needed to print the table.
+     * 
+     * @param out    The PrintStream needed to print the table.
      * @param asNull The default value to print if a table's value is null.
      */
     public PrettyPrinter(PrintStream out, String asNull) {
-        if ( out == null ) {
+        if (out == null) {
             throw new IllegalArgumentException("No print stream provided");
         }
-        if ( asNull == null ) {
+        if (asNull == null) {
             throw new IllegalArgumentException("No NULL-value placeholder provided");
         }
         this.out = out;
@@ -62,13 +66,14 @@ public final class PrettyPrinter {
      * Main PrettyPrinter method. It calculates the length of the table's values and
      * it generates a custom border to enclose values.
      * If the table is null, an error is thrown.
+     * 
      * @param table The matrix of Strings to print.
      */
     public void print(String[][] table) {
-        if ( table == null ) {
+        if (table == null) {
             throw new IllegalArgumentException("No tabular data provided");
         }
-        if ( table.length == 0 ) {
+        if (table.length == 0) {
             return;
         }
         final int[] widths = new int[getMaxColumns(table)];
@@ -80,19 +85,20 @@ public final class PrettyPrinter {
     private void printPreparedTable(String[][] table, int[] widths, String horizontalBorder) {
         final int lineLength = horizontalBorder.length();
         out.println(horizontalBorder);
-        for ( final String[] row : table ) {
-            if ( row != null ) {
+        for (final String[] row : table) {
+            if (row != null) {
                 out.println(getRow(row, widths, lineLength));
                 out.println(horizontalBorder);
             }
         }
     }
 
-    // Returns a row containing the values of the matrix's cells and the formatting of the table.
+    // Returns a row containing the values of the matrix's cells and the formatting
+    // of the table.
     private String getRow(String[] row, int[] widths, int lineLength) {
         final StringBuilder builder = new StringBuilder(lineLength).append(VERTICAL_BORDER);
         final int maxWidths = widths.length;
-        for ( int i = 0; i < maxWidths; i++ ) {
+        for (int i = 0; i < maxWidths; i++) {
             builder.append(padRight(getCellValue(safeGet(row, i, null)), widths[i])).append(VERTICAL_BORDER);
         }
         return builder.toString();
@@ -102,8 +108,8 @@ public final class PrettyPrinter {
     private String getHorizontalBorder(int[] widths) {
         final StringBuilder builder = new StringBuilder(256);
         builder.append(BORDER_KNOT);
-        for ( final int w : widths ) {
-            for ( int i = 0; i < w; i++ ) {
+        for (final int w : widths) {
+            for (int i = 0; i < w; i++) {
                 builder.append(HORIZONTAL_BORDER);
             }
             builder.append(BORDER_KNOT);
@@ -114,8 +120,8 @@ public final class PrettyPrinter {
     // Returns the total columns of the matrix.
     private int getMaxColumns(String[][] rows) {
         int max = 0;
-        for ( final String[] row : rows ) {
-            if ( row != null && row.length > max ) {
+        for (final String[] row : rows) {
+            if (row != null && row.length > max) {
                 max = row.length;
             }
         }
@@ -124,12 +130,12 @@ public final class PrettyPrinter {
 
     // Calculates column widths and stores them in an array of int.
     private void adjustColumnWidths(String[][] rows, int[] widths) {
-        for ( final String[] row : rows ) {
-            if ( row != null ) {
-                for ( int c = 0; c < widths.length; c++ ) {
+        for (final String[] row : rows) {
+            if (row != null) {
+                for (int c = 0; c < widths.length; c++) {
                     final String cv = patternMatch(getCellValue(safeGet(row, c, asNull)));
                     final int l = cv.length();
-                    if ( widths[c] < l ) {
+                    if (widths[c] < l) {
                         widths[c] = l;
                     }
                 }
@@ -138,7 +144,7 @@ public final class PrettyPrinter {
     }
 
     /*
-     * Calculates the total spaces to append to the single cell, 
+     * Calculates the total spaces to append to the single cell,
      * so that all cells have the same length.
      */
     private static String padRight(String s, int n) {

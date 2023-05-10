@@ -8,11 +8,12 @@ import java.util.Deque;
 import java.util.List;
 
 /**
- * Represents a Golem , it is used for battles by making their element stones react.
+ * Represents a Golem , it is used for battles by making their element stones
+ * react.
  */
 public class TamaGolem {
-    private Deque<Element> elementStones; //Represents the stones that the golem retains.
-    private int healthPoints; //Its current health
+    private Deque<Element> elementStones; // Represents the stones that the golem retains.
+    private int healthPoints; // Its current health
 
     /**
      * @param healthPoints its max health
@@ -24,6 +25,7 @@ public class TamaGolem {
 
     /**
      * Sets the element stones.
+     * 
      * @param stones the stones to give to the golem
      */
     public void setElementsStones(Element... stones) {
@@ -31,7 +33,8 @@ public class TamaGolem {
     }
 
     /**
-     * @return all the element stones inside the golem in the order they are at the moment.
+     * @return all the element stones inside the golem in the order they are at the
+     *         moment.
      */
     public List<Element> getElementStones() {
         return elementStones.stream().toList();
@@ -42,7 +45,7 @@ public class TamaGolem {
      */
     public Element getNextStone() {
         Element nextElement = elementStones.element();
-        elementStones.add(nextElement); //The stone is put at the tail of the queue
+        elementStones.add(nextElement); // The stone is put at the tail of the queue
         elementStones.remove(); // and removed from the head to make the system circular.
         return nextElement;
     }
@@ -56,11 +59,13 @@ public class TamaGolem {
 
     /**
      * Decreases the health of the golem by the specified amount.
+     * 
      * @param amountOfHealthToRemove the amount of health to remove.
      */
     public void damageGolem(int amountOfHealthToRemove) {
         healthPoints -= amountOfHealthToRemove;
-        if(healthPoints < 0) healthPoints = 0;
+        if (healthPoints < 0)
+            healthPoints = 0;
     }
 
     /**

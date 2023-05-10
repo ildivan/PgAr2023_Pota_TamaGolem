@@ -12,7 +12,8 @@ public class Literals {
     public static final String GOLEM_HEALTH_MESSAGE = "Golem di %s: %d/%d\n";
     public static final String REACTING_STONES_MESSAGE = "Le pietre %s e %s stanno reagendo!\n";
     public static final String ATTACK_DAMAGE_MESSAGE = "Il golem di %s fa danno %d al golem di %s\n";
-    public static final String SAME_STONES_ERROR = AnsiColors.RED + "I due Golem non possono avere le stesse pietre!" + AnsiColors.RESET;
+    public static final String SAME_STONES_ERROR = AnsiColors.RED + "I due Golem non possono avere le stesse pietre!"
+            + AnsiColors.RESET;
     public static final String YOU_HAVE_SELECTED = "Hai selezionato: ";
     public static final String ELEMENT_CONFIRMATION = "\n\nConfermi gli elementi";
     public static final String REMAINING_ELEMENT_IN_STORAGE_MESSAGE = "- %s (%d / %d)\n";

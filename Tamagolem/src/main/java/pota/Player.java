@@ -3,7 +3,7 @@ package pota;
 import it.kibo.fp.lib.AnsiColors;
 
 /**
- * The <strong>Player</strong> class creates a Player that contains a 
+ * The <strong>Player</strong> class creates a Player that contains a
  * custom name and stores the Team of golem of a battle.
  */
 public class Player {
@@ -11,8 +11,9 @@ public class Player {
     private Team team;
 
     /**
-     * Constructor that creates a <code>Player</code> object specifying 
+     * Constructor that creates a <code>Player</code> object specifying
      * the custom name.
+     * 
      * @param name
      */
     public Player(String name) {
@@ -21,6 +22,7 @@ public class Player {
 
     /**
      * Retrieves the Player's name and adds an ANSI code to color it blue.
+     * 
      * @return A String representing the name of the Player.
      */
     public String getName() {
@@ -29,6 +31,7 @@ public class Player {
 
     /**
      * Sets the Player's name.
+     * 
      * @param name
      */
     public void setName(String name) {
@@ -37,6 +40,7 @@ public class Player {
 
     /**
      * Gets the Player's current team.
+     * 
      * @return A Team object.
      */
     public Team getTeam() {
@@ -45,6 +49,7 @@ public class Player {
 
     /**
      * Creates a new Team object and assigns it to the player.
+     * 
      * @param numberOfGolems
      * @param golemHealthPoints
      */
