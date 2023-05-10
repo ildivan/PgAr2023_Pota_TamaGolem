@@ -30,20 +30,25 @@ public class ElementsBalance {
     public static ElementsBalance newRandomBalance(int numberOfElements, int maxDamage){
         //The algorithms work differently depending on the parity of numberOfElements.
         boolean oddNumberOfElements = numberOfElements % 2 != 0;
+        //The table of the damages between the elements.
         int[][] damageTable = new int[numberOfElements][numberOfElements];
+        //Stores the row's sum of the matrix as the algorithm iterates through them.
         int[] rowsPartialSum = new int[numberOfElements];
 
+        //Sets half the upper triangle of the matrix to values that allow the elements to be balanced.
         for (int i = 0; i < (numberOfElements / 2); i++) {
             for (int j = i + 1; j < (numberOfElements / 2); j++) {
                 int remaining = (numberOfElements / 2) - j;
+                //Generates random damage within the bounds according to the parity of the matrix.
                 if(oddNumberOfElements){
                     damageTable[i][j] = generateRandomDamage(maxDamage, rowsPartialSum[i], remaining);
                 }else{
                     damageTable[i][j] = generateRandomDamage(maxDamage/2, rowsPartialSum[i], remaining);
                 }
                 damageTable[i][numberOfElements - j - 1] = damageTable[i][j];
-                rowsPartialSum[i] += damageTable[i][j];
+                rowsPartialSum[i] += damageTable[i][j]; //Updates sum of row
             }
+            //Sets the last element of each iteration to a value that makes the sum of the row zero.
             if(oddNumberOfElements){
                 damageTable[i][numberOfElements / 2] = -rowsPartialSum[i];
                 damageTable[i][numberOfElements - i - 1] = -rowsPartialSum[i];
@@ -51,6 +56,8 @@ public class ElementsBalance {
                 damageTable[i][numberOfElements - i - 1] = -2*rowsPartialSum[i];
             }
         }
+
+
         //Adjusts the elements near the center of the matrix if the number of elements in odd.
         if (oddNumberOfElements) {
             damageTable[numberOfElements / 2 - 1][numberOfElements / 2]
@@ -67,7 +74,10 @@ public class ElementsBalance {
                     + damageTable[numberOfElements / 2 - 2][numberOfElements / 2]);
         }
 
+        //Fill the upper triangle by symmetrizing the matrix along the secondary diagonal.
         symmetrizeUpperTriangle(damageTable);
+        //Fill the lower triangle by turning the matrix into an antisymmetric one
+        // along the principal diagonal.
         toAntiSymmetricMatrix(damageTable);
 
         return new ElementsBalance(damageTable);
@@ -100,6 +110,8 @@ public class ElementsBalance {
             (int maxDamage, int partialSumOfRow, int remainingElementsInRow) {
         int lowerBound = getLowerBoundNumberOfElements(maxDamage, partialSumOfRow ,remainingElementsInRow);
         int upperBound = getUpperBoundNumberOfElements(maxDamage, partialSumOfRow, remainingElementsInRow);
+        //If it is generating the second last value, it cannot be equal to the -partialSumOfRow,
+        //or the last element would be 0, and it is not allowed.
         if(remainingElementsInRow == 1){
             return generateValidRandomNumber(lowerBound,upperBound,-partialSumOfRow);
         }
@@ -125,6 +137,7 @@ public class ElementsBalance {
         do{
             invalid = false;
             randomNumber = (int) (Math.random() * (upperBound - lowerBound)) + lowerBound;
+            //Checks if the generated number is one of the invalidValues
             for (int v : invalidValues) {
                 if (v == randomNumber) {
                     invalid = true;
